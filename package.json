@@ -1,0 +1,22 @@
+{
+  "name": "KnowledgeCache",
+  "version": "1.0.0",
+  "description": "```\r npm init -y\r npm install express\r npm install -D nodemon\r ```",
+  "main": "app.js",
+  "scripts": {
+    "start": "node app",
+    "dev": "nodemon app"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "body-parser": "^1.19.0",
+    "ejs": "^2.6.2",
+    "express": "^4.17.1",
+    "mysql": "^2.17.1"
+  },
+  "devDependencies": {
+    "nodemon": "^1.19.1"
+  }
+}
