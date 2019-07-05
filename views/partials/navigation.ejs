@@ -48,19 +48,20 @@
 
             <div class="modal-body">
 
-                <form method="post" action="/home">
+                <form method="post" action="/addLink">
                     <div class="form-group">
-                        <label>url</label>
-                        <input type="text" class="form-control" name="inputUrl" placeholder="the link">
+                        <label>Link</label>
+                        <input type="text" class="form-control" name="url" placeholder="Paste in url">
                     </div>
                     <div class="form-group">
                             <label for="title">Title</label>
-                            <input type="text" class="form-control" name="inputTitle" aria-describedby="emailHelp" placeholder="Enter title">
+                            <input type="text" class="form-control" name="title"  placeholder="Enter title">
                     </div>
+                    <!--
                     <div class="form-group">
                             <label for="category">Category</label>
                             <input type="text" class="form-control" name="inputCategory" placeholder="Where does it belong">
-                    </div>
+                    </div>-->
 
                     <div class="modal-footer">
                         <button type="submit" class="btn btn-success">Save</button>

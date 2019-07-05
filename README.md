@@ -15,6 +15,7 @@ npm install body-parser
 npm install express
 npm install -D nodemon
 npm install ejs --save
+npm install moment --save
 npm install mysql
 ```
 
