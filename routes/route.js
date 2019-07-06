@@ -8,7 +8,11 @@ var urlencodedParser = bodyParser.urlencoded({ extended: false });
 
 
 router.get('/', (req, res) => {
-    res.render("home");
+    
+    database.getLinks(function(result) {
+        console.log(result);
+        res.render("home", {links: result});
+    });
 });
 
 router.post('/addLink', urlencodedParser, function(req, res){

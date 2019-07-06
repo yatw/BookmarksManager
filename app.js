@@ -6,8 +6,6 @@ const app = express();
 
 
 
-
-
 // set up static folder
 app.use(express.static(path.join(__dirname, 'public')));
 

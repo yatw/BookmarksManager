@@ -8,7 +8,8 @@ const moment = require('moment');
 var db = mysql.createConnection({
   host     : 'localhost',
   user     : 'root',
-  password: 'smooth'
+  password: 'smooth',
+  dateStrings: 'date'
 });
 
 db.connect((err) => { 
@@ -31,20 +32,31 @@ function usedatabase(){
 
 function insert (input) {
     usedatabase();
-    console.log("went in");
 
     input['createdDate'] = moment(Date.now()).format('YYYY-MM-DD');
-    input['dueDate'] = moment(Date.now()).format('YYYY-MM-DD');
     input['star'] = false;
 
     let sql = 'INSERT INTO links SET ?';
 
     let query = db.query(sql, input,  (err, result) => {
         if (err) throw err;
-        console.log(result);
     });
   
 }
 
+function getLinks(callback){
+  usedatabase();
+
+  let sql = 'SELECT * FROM links;';
+
+  let query = db.query(sql,  (err, result) => {
+      if (err) throw err;
+      callback(result);
+  });
+}
+
+
+
 module.exports.insert = insert;
+module.exports.getLinks = getLinks;
 

@@ -37,12 +37,3 @@ html, body{
 .modal {
     top: 20%;
  }
-
-.cover-pic{
-    background-image: url(../images/pinkflowers.jpg);
-    height: 500px;
-    background-position: center; 
-    background-repeat: no-repeat; 
-    background-size: cover; 
-}
- 
