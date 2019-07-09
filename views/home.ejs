@@ -1,6 +1,7 @@
 <!doctype html>
 <html lang="en">
   <head>
+    <script src="routes/route.js"></script> 
     <% include partials/head.ejs %>
   </head>
   <body>
@@ -22,11 +23,12 @@
         <table class="table table-striped">
           <thead>
             <tr>
-              <th scope="col">#</th>
-              <th scope="col">Title</th>
-              <th scope="col">CreatedDate</th>
-              <th scope="col">DueDate</th>
-              <th scope="col">Star</th>
+              <th scope="col" style="width: 1%">#</th>
+              <th scope="col" style="width: 1%">Star</th>
+              <th scope="col" style="width: 20%">Title</th>
+              <th scope="col" style="width: 70%">Description</th>
+              <th scope="col" style="width: 7%">CreatedDate</th>
+              <th scope="col" style="width: 1%">Complete</th>
             </tr>
           </thead>
           <tbody>
@@ -34,9 +36,13 @@
             <% for (var i = 0; i < links.length; i++){ %>
               <tr>
                 <th scope="row"><%= links[i].linkId %></th>
-                <td><%= links[i].title %></td>
+                <th scope="row"><%= links[i].star %></th>
+                <td>
+                  <a href= <%= links[i].url %>><%= links[i].title %></a>
+                </td>
+                <td><%= links[i].detail %></td>
                 <td><%= links[i].createdDate %></td>
-                <td><%= links[i].dueDate %></td>
+                <td><%= links[i].complete %></td>
               </tr>             
             <% } %>
 

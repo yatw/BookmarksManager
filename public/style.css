@@ -1,0 +1,47 @@
+html, body{
+    background: #E9ECEF;
+}
+
+.container-fluid{
+    width: 96%;
+    height: 4000px;
+    background: #ffffff;
+    padding: 0;
+}
+
+.banner{
+    height: 40px;
+    background: linear-gradient(to right, #66ffff, #ccffff, #ccff99, #ccff99, #ccff99, #ccff99, #ffff99, #ffff99);
+}
+
+.banner p{
+    font-size: 18pt;
+    font-weight: bold;
+    color: #1a75ff;
+}
+
+.navbar{
+    padding-left: 0;
+    height: 60px;
+    background: #ffffcc;
+}
+
+.center{
+    text-align: center;
+}
+
+.bar-size{
+    width: 500px;
+}
+
+.modal {
+    top: 20%;
+ }
+
+.warningbox{
+    border-color: #ff8080;
+}
+
+.successbox{
+    border-color: #00b300;
+}

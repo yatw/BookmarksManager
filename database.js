@@ -35,12 +35,15 @@ function insert (input) {
 
     input['createdDate'] = moment(Date.now()).format('YYYY-MM-DD');
     input['star'] = false;
+    input['complete'] = false;
+    console.log(input);
 
     let sql = 'INSERT INTO links SET ?';
-
+    
     let query = db.query(sql, input,  (err, result) => {
         if (err) throw err;
     });
+    
   
 }
 
