@@ -26,23 +26,46 @@
               <th scope="col" style="width: 1%">#</th>
               <th scope="col" style="width: 1%">Star</th>
               <th scope="col" style="width: 20%">Title</th>
-              <th scope="col" style="width: 70%">Description</th>
-              <th scope="col" style="width: 7%">CreatedDate</th>
-              <th scope="col" style="width: 1%">Complete</th>
+              <th scope="col" style="width: 65%">Description</th>
+              <th scope="col" style="width: 5%">CreatedDate</th>
+              <th scope="col" style="width: 1%">Read</th>
+              <th scope="col" style="width: 1"></th>
             </tr>
           </thead>
           <tbody>
 
             <% for (var i = 0; i < links.length; i++){ %>
               <tr>
-                <th scope="row"><%= links[i].linkId %></th>
-                <th scope="row"><%= links[i].star %></th>
+                <td scope="row" id="linkId"><%= links[i].linkId %></td>
+
+                <!-- Star-->
+                <% if (links[i].star){ %>
+                  <th scope="row"><i class=" fas fa-star fa-clickable" style="font-size:20px;color:#FFD700"></i></th>
+                <% } else { %>
+                  <th scope="row"><i class=" far fa-star fa-clickable" style="font-size:20px;color:#FFD700"></i></th>
+                <% } %>
+
+                <!-- Title-->
                 <td>
-                  <a href= <%= links[i].url %>><%= links[i].title %></a>
+                  <a href= <%= links[i].url %> target="_blank"><%= links[i].title %></a>
                 </td>
+
+                <!-- Detail-->
                 <td><%= links[i].detail %></td>
+
+                <!-- createdDate-->
                 <td><%= links[i].createdDate %></td>
-                <td><%= links[i].complete %></td>
+
+                <!-- Read-->
+                <% if (links[i].completed){ %>
+                  <td><i class="fas fa-check-square fa-clickable" style="font-size:30px;color:#02cf32;"></i></td>
+                <% } else { %>
+                  <td><i class="far fa-check-square fa-clickable" style="font-size:30px;color:#02cf32;"></i></td>
+                <% } %>
+
+                <!-- Edit-->
+                <td><i class="fas fa-edit fa-clickable" style="font-size:30px;color:#ff9933"></i></td>
+
               </tr>             
             <% } %>
 

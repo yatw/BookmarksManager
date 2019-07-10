@@ -1,12 +1,9 @@
 const bodyParser = require('body-parser');
 const express = require('express');
 const path = require('path');
-const cors = require('cors');
 
 
 const app = express();
-
-app.use(cors());
 
 // set up static folder
 app.use(express.static(path.join(__dirname, 'public')));
@@ -22,6 +19,7 @@ app.set('view engine', 'ejs');
 app.use('/', require('./routes/route'));
 app.use('/getTitle', require('./routes/route'));
 app.use('/addLink', require('./routes/route'));
+app.use('/checkbox', require('./routes/route'));
 app.use('*', require('./routes/route'));
 
 

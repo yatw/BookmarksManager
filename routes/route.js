@@ -52,9 +52,15 @@ router.post('/getTitle', urlencodedParser, function(req, res){
 
 
 router.post('/addLink', urlencodedParser, function(req, res){
-    database.insert(req.body);
-    res.redirect("/");
+  database.insert(req.body);
+  res.redirect("/");
 });
+
+router.post('/checkbox', urlencodedParser, function(req, res){
+  database.checkbox(req.body);
+  res.redirect("/");
+});
+
 
 router.get('*', (req, res) => {
     res.send("404 page not found");

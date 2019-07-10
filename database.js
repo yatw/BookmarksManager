@@ -23,43 +23,44 @@ if (err){
 
 function usedatabase(){
 
-  let sql = 'USE infoCluster';
-
-  let query = db.query(sql,  (err, result) => {
+  db.query('USE infoCluster',  (err, result) => {
       if (err) throw err;
    }); 
 }
 
 function insert (input) {
-    usedatabase();
+  usedatabase();
 
-    input['createdDate'] = moment(Date.now()).format('YYYY-MM-DD');
-    input['star'] = false;
-    input['complete'] = false;
-    console.log(input);
-
-    let sql = 'INSERT INTO links SET ?';
-    
-    let query = db.query(sql, input,  (err, result) => {
-        if (err) throw err;
-    });
-    
+  input['createdDate'] = moment(Date.now()).format('YYYY-MM-DD');
+  input['star'] = false;
+  input['completed'] = false;
   
+  db.query('INSERT INTO links SET ?', input,  (err, result) => {
+      if (err) throw err;
+  });  
 }
 
 function getLinks(callback){
   usedatabase();
-
-  let sql = 'SELECT * FROM links;';
-
-  let query = db.query(sql,  (err, result) => {
+  
+  db.query('SELECT * FROM links;',  (err, result) => {
       if (err) throw err;
       callback(result);
   });
 }
 
+// both star and read are checkbox and use this function
+function checkbox(input){
+  usedatabase();
 
+  let sql = 'UPDATE links SET ?? = ? WHERE linkId = ?;';
+
+  db.query(sql, [input.field, input.status, input.linkId], (err, result) => {
+      if (err) throw err;
+  });
+}
 
 module.exports.insert = insert;
 module.exports.getLinks = getLinks;
+module.exports.checkbox = checkbox;
 
