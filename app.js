@@ -19,6 +19,8 @@ app.set('view engine', 'ejs');
 app.use('/', require('./routes/route'));
 app.use('/getTitle', require('./routes/route'));
 app.use('/addLink', require('./routes/route'));
+app.use('/editLink', require('./routes/route'));
+app.use('/deleteLink', require('./routes/route'));
 app.use('/checkbox', require('./routes/route'));
 app.use('*', require('./routes/route'));
 

@@ -27,11 +27,11 @@ router.post('/getTitle', urlencodedParser, function(req, res){
           var metaDescription =  $('meta[name=description]').attr("content");
 
           if (webpageTitle != undefined && webpageTitle.length >= 100){
-            webpageTitle = webpageTitle.substring(0, 100) + "...";
+            webpageTitle = webpageTitle.trim().substring(0, 100) + "...";
           }
 
           if (metaDescription != undefined && metaDescription.length >= 150){
-            metaDescription = metaDescription.substring(0, 150) + "...";
+            metaDescription = metaDescription.trim().substring(0, 150) + "...";
           }
           
           const webpage = {
@@ -50,10 +50,21 @@ router.post('/getTitle', urlencodedParser, function(req, res){
     
 });
 
-
 router.post('/addLink', urlencodedParser, function(req, res){
-  database.insert(req.body);
+  database.insertLink(req.body);
   res.redirect("/");
+});
+
+router.post('/editLink', urlencodedParser, function(req, res){
+  database.updateLink(req.body);
+  res.redirect("/");
+});
+
+router.post('/deleteLink', urlencodedParser, function(req, res){
+  database.deleteLink(req.body);
+  res.redirect("/"); // this line doesn't redirect on its own for some reason, need to combine with ajax success function
+  // doesn't redirect becasue of the ajax post
+  //https://stackoverflow.com/questions/27202075/expressjs-res-redirect-not-working-as-expected
 });
 
 router.post('/checkbox', urlencodedParser, function(req, res){

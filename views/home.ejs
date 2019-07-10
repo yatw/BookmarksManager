@@ -24,6 +24,7 @@
           <thead>
             <tr>
               <th scope="col" style="width: 1%">#</th>
+              <th scope="col" style="width: 0%; display:none;" ></th>
               <th scope="col" style="width: 1%">Star</th>
               <th scope="col" style="width: 20%">Title</th>
               <th scope="col" style="width: 65%">Description</th>
@@ -36,7 +37,12 @@
 
             <% for (var i = 0; i < links.length; i++){ %>
               <tr>
+
+                <!-- linkId-->
                 <td scope="row" id="linkId"><%= links[i].linkId %></td>
+
+                <!-- url -->
+                <td scope="row" id="url" style="display:none;"><%= links[i].url %></td>
 
                 <!-- Star-->
                 <% if (links[i].star){ %>

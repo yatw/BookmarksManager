@@ -28,7 +28,7 @@ function usedatabase(){
    }); 
 }
 
-function insert (input) {
+function insertLink (input) {
   usedatabase();
 
   input['createdDate'] = moment(Date.now()).format('YYYY-MM-DD');
@@ -40,6 +40,22 @@ function insert (input) {
   });  
 }
 
+function updateLink (input) {
+  usedatabase();
+
+  db.query('UPDATE links SET url = ?, title = ?, detail = ? WHERE linkId = ?', [input.url, input.title, input.detail, input.linkId],  (err, result) => {
+      if (err) throw err;
+  });  
+}
+
+function deleteLink (input) {
+  usedatabase();
+
+  db.query('DELETE FROM links WHERE linkId = ?;', [input.linkId],  (err, result) => {
+    if (err) throw err;
+  });
+}
+
 function getLinks(callback){
   usedatabase();
   
@@ -49,18 +65,20 @@ function getLinks(callback){
   });
 }
 
+
+
 // both star and read are checkbox and use this function
 function checkbox(input){
   usedatabase();
 
-  let sql = 'UPDATE links SET ?? = ? WHERE linkId = ?;';
-
-  db.query(sql, [input.field, input.status, input.linkId], (err, result) => {
+  db.query('UPDATE links SET ?? = ? WHERE linkId = ?;', [input.field, input.status, input.linkId], (err, result) => {
       if (err) throw err;
   });
 }
 
-module.exports.insert = insert;
+module.exports.deleteLink = deleteLink;
+module.exports.insertLink = insertLink;
 module.exports.getLinks = getLinks;
 module.exports.checkbox = checkbox;
+module.exports.updateLink = updateLink;
 
