@@ -10,42 +10,51 @@ var urlencodedParser = bodyParser.urlencoded({ extended: false });
 
 
 router.get('/', (req, res) => {
-    
-    database.getLinks(function(result) {
-        res.render("home", {links: result});
-    });
+  
+  database.getLinks(function(result) {
+      res.render("home", {links: result});
+  });
 });
 
 router.post('/getTitle', urlencodedParser, function(req, res){
+
+    var url = req.body.url.trim();
     
-    request(req.body.url, function (error, response, body) {
+    database.checkExist(url, function(result) {
 
-        if (!error && response.statusCode == 200) {
+      var count = result.count; // count url that is the same in database
 
-          const $ = cheerio.load(body);
-          var webpageTitle = $("title").text();
-          var metaDescription =  $('meta[name=description]').attr("content");
+      request(url, function (error, response, body) {
 
-          if (webpageTitle != undefined && webpageTitle.length >= 100){
-            webpageTitle = webpageTitle.trim().substring(0, 100) + "...";
+          if (!error && response.statusCode == 200) {
+
+            const $ = cheerio.load(body);
+            var webpageTitle = $("title").text();
+            var metaDescription =  $('meta[name=description]').attr("content");
+
+            if (webpageTitle != undefined && webpageTitle.length >= 100){
+              webpageTitle = webpageTitle.trim().substring(0, 100) + "...";
+            }
+
+            if (metaDescription != undefined && metaDescription.length >= 150){
+              metaDescription = metaDescription.trim().substring(0, 150) + "...";
+            }
+            
+            const webpage = {
+              status: count == 0? "success" : "exist",
+              title: webpageTitle,
+              metaDescription: metaDescription
+            }
+
+            res.send(webpage);
+          }else{
+              res.send({
+                  status: "fail"
+              })
           }
 
-          if (metaDescription != undefined && metaDescription.length >= 150){
-            metaDescription = metaDescription.trim().substring(0, 150) + "...";
-          }
-          
-          const webpage = {
-            status: "success",
-            title: webpageTitle,
-            metaDescription: metaDescription
-          }
-
-          res.send(webpage);
-        }else{
-            res.send({
-                status: "fail"
-            })
-        }
+      });
+        
     });
     
 });
@@ -72,6 +81,13 @@ router.post('/checkbox', urlencodedParser, function(req, res){
   res.redirect("/");
 });
 
+router.post('/search', urlencodedParser, function(req, res){
+
+  database.search(req.body, function(result) {
+    console.log(result);
+    res.render("home", {links: result});
+  });
+});
 
 router.get('*', (req, res) => {
     res.send("404 page not found");

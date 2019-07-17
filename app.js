@@ -22,6 +22,7 @@ app.use('/addLink', require('./routes/route'));
 app.use('/editLink', require('./routes/route'));
 app.use('/deleteLink', require('./routes/route'));
 app.use('/checkbox', require('./routes/route'));
+app.use('/search', require('./routes/route'));
 app.use('*', require('./routes/route'));
 
 

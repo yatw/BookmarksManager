@@ -63,8 +63,28 @@ function getLinks(callback){
       if (err) throw err;
       callback(result);
   });
+  
 }
 
+function search(input, callback){
+  usedatabase();
+
+  db.query('SELECT * FROM links WHERE ( title LIKE ? OR detail LIKE ?)', [input.query, input.query], (err, result) => {
+      if (err) throw err;
+      callback(result);
+  });
+}
+
+function checkExist(input, callback){
+  usedatabase();
+
+  var query = db.query('SELECT COUNT(*) as count FROM links WHERE url=?', [input], (err, result) => {
+      if (err) throw err;
+      callback(result[0]);
+  });
+
+  //console.log(query.sql);
+}
 
 
 // both star and read are checkbox and use this function
@@ -76,9 +96,11 @@ function checkbox(input){
   });
 }
 
+module.exports.checkExist = checkExist;
 module.exports.deleteLink = deleteLink;
 module.exports.insertLink = insertLink;
 module.exports.getLinks = getLinks;
 module.exports.checkbox = checkbox;
 module.exports.updateLink = updateLink;
+module.exports.search = search;
 

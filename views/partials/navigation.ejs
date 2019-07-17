@@ -19,7 +19,7 @@
         </span>
 
         <form class="row ml-5">
-            <input type="text" class="form-control search-query bar-size" placeholder="Search for a title..." aria-label="Search">
+            <input type="text" class="form-control search-query bar-size" placeholder="Search" id="searchBox">
             <button class="btn btn-success my-2 ml-sm-2 my-sm-0" type="submit">Search</button>
         </form>
         
@@ -68,7 +68,8 @@
                     </div>-->
 
                     <div class="modal-footer">
-                        <button type="submit" class="btn btn-success">Save</button>
+                        <p id="duplicateAlert" style="color: red; visibility: hidden;">The exact same link is already stored in database</p>
+                        <button type="submit" class="btn btn-success" disabled id="submitButton">Save</button>
                     </div>
 
                 </form>

@@ -1,8 +1,9 @@
 
-
 var urlField = document.getElementById('urlInput');
 var titleField = document.getElementById('titleInput');
 var descriptionField = document.getElementById('descriptionInput');
+var duplicateAlert = document.getElementById('duplicateAlert');
+
 
 $('#urlInput').on('input', function() {
     
@@ -18,9 +19,14 @@ $('#urlInput').on('input', function() {
         contentType: "application/json",    
         dataType: "json",
         success: function(data) {
-            console.log(data.status);
+
+            duplicateAlert.style.visibility  = "hidden";
+
+
             if (data.status === "fail"){
                 ExtractFail();
+            }else if (data.status === "exist") {
+                DuplicateWarning(data);
             }else{
                 ExtractSuccess(data);
             }
@@ -33,6 +39,23 @@ $('#urlInput').on('input', function() {
    
 });
 
+
+function DuplicateWarning(data){
+
+    duplicateAlert.style.visibility  = "visible";
+
+    urlField.classList.remove("successbox");
+    urlField.classList.add("warningbox");
+
+    titleField.classList.remove("successbox");
+    titleField.classList.add("warningbox");
+
+    descriptionField.classList.remove("successbox");
+    descriptionField.classList.add("warningbox");
+
+    titleField.value = data.title;
+    descriptionField.value = data.metaDescription;
+}
 
 function ExtractFail(){
     
@@ -50,6 +73,8 @@ function ExtractFail(){
 }
 
 function ExtractSuccess(data){
+
+    $('#submitButton').prop('disabled', false);
 
     urlField.classList.remove("warningbox");
     urlField.classList.add("successbox");
@@ -163,4 +188,25 @@ $("#deleteLink").click(function(event){
     })
 })
 
+$('#searchBox').on('input', function() {
+    
+    var query = document.getElementById('searchBox').value;
 
+    if (query.length > 2){
+    
+        $.ajax({
+            type: "POST",
+            url: "/search",
+            data: JSON.stringify({'query': query}),
+            contentType: "application/json",    
+            dataType: "html",
+            success: function(data) {
+                window.location.href = "/";
+            },
+            error: function (jqXHR, textStatus, errorThrown) {
+                console.log("something went wrong");
+            }
+        });
+    }
+     
+});
