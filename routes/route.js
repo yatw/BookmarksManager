@@ -16,6 +16,20 @@ router.get('/', (req, res) => {
   });
 });
 
+router.get('/getLinks', (req, res) => {
+  
+  database.getLinks(function(result) {
+      res.json(result);
+  });
+});
+
+router.get('/getLinksCount', (req, res) => {
+  
+  database.getLinksCount(function(result) {
+      res.json(result);
+  });
+});
+
 router.post('/getTitle', urlencodedParser, function(req, res){
 
     var url = req.body.url.trim();

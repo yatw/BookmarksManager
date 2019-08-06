@@ -66,6 +66,16 @@ function getLinks(callback){
   
 }
 
+function getLinksCount(callback){
+  usedatabase();
+  
+  db.query('SELECT COUNT(*) as count FROM links;',  (err, result) => {
+      if (err) throw err;
+      callback(result);
+  });
+  
+}
+
 function search(input, callback){
   usedatabase();
 
@@ -100,6 +110,7 @@ module.exports.checkExist = checkExist;
 module.exports.deleteLink = deleteLink;
 module.exports.insertLink = insertLink;
 module.exports.getLinks = getLinks;
+module.exports.getLinksCount = getLinksCount;
 module.exports.checkbox = checkbox;
 module.exports.updateLink = updateLink;
 module.exports.search = search;

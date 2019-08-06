@@ -90,63 +90,6 @@ function ExtractSuccess(data){
 }
 
 
-$("i.fa-star").click(function(event){
-
-
-    var linkId = parseInt($(event.target).closest('tr').find('td:first').text());
-    var filled = this.classList.contains("fas");
-    var status = true;
-
-    if (filled){
-        this.classList.remove("fas");
-        this.classList.add("far");
-        status = false;
-    }else{
-        this.classList.remove("far");
-        this.classList.add("fas");
-    }  
-
-    $.ajax({
-        type: "POST",
-        url: "/checkbox",
-        data: JSON.stringify({field: 'star', linkId: linkId, status: status}),
-        contentType: "application/json",    
-        dataType: "json",
-
-    });
-
-})
-
-$("i.fa-check-square").click(function(event){
-    
-    var linkId = parseInt($(event.target).closest('tr').find('td:first').text());
-    var filled = this.classList.contains("fas");
-    var status = true;
-
-    if (filled){
-        this.classList.remove("fas");
-        this.classList.add("far");
-        status = false;
-    }else{
-        this.classList.remove("far");
-        this.classList.add("fas");
-    }  
-
-    $.ajax({
-        type: "POST",
-        url: "/checkbox",
-        data: JSON.stringify({field: 'completed', linkId: linkId, status: status}),
-        contentType: "application/json",    
-        dataType: "json",
-        success: function(result){
-            console.log("done");
-          },
-          error: function(result){
-            console.log(result);
-          }
-    });
-
-})
 
 $("i.fa-edit").click(function(event){
 

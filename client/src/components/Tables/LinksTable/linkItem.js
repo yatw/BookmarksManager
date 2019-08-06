@@ -3,6 +3,7 @@ import PropTypes from 'prop-types';
 
 export class LinkItem extends Component {
 
+    
     getStarClass = () =>{
         
         return (this.props.link.star)?"fas fa-star fa-clickable" : "far fa-star fa-clickable";
@@ -15,15 +16,14 @@ export class LinkItem extends Component {
 
     
     render() {
-        const {linkId, title, detail, star} = this.props.link;
-
+        const {linkId, title, detail, star, completed, url} = this.props.link;
         return (
             <tr>
                 {/*linkId */}
                 <td id="linkId">{this.props.link.linkId}</td>
 
                 {/*Star */}
-                <td><i className={this.getStarClass()} style={{fontSize:'20px', color:'#FFD700'}} onClick={this.props.starToggle.bind(this, linkId, star)}></i></td>
+                <td><i className={this.getStarClass()} style={{fontSize:'20px', color:'#FFD700'}} onClick={this.props.checkboxToggle.bind(this, linkId, 'star', star)}></i></td>
               
                 {/*Title */}
                 <td><a href= {this.props.link.url} target="_blank">{title}</a></td>
@@ -35,10 +35,10 @@ export class LinkItem extends Component {
                 <td>{this.props.link.createdDate}</td>
 
                 {/*Read */}
-                <td><i className={this.getReadClass()} style={{fontSize:'30px', color:'#02cf32'}}></i></td>
+                <td><i className={this.getReadClass()} style={{fontSize:'30px', color:'#02cf32'}} onClick={this.props.checkboxToggle.bind(this, linkId, 'completed', completed)}></i></td>
 
                 {/*Edit */}
-                <td><i className="fas fa-edit fa-clickable" style={{fontSize:'30px', color:'#ff9933'}}></i></td>
+                <td><i className="fas fa-edit fa-clickable" style={{fontSize:'30px', color:'#ff9933'}} onClick={this.props.handleEditClick.bind(this, linkId, url, title, detail )}></i></td>
             </tr>
         );
     }
@@ -46,7 +46,9 @@ export class LinkItem extends Component {
 
 // PropTypes
 LinkItem.propTypes = {
-    link: PropTypes.object.isRequired
+    link: PropTypes.object.isRequired,
+    checkboxToggle: PropTypes.func.isRequired,
+    handleEditClick: PropTypes.func.isRequired
 }
 
   
