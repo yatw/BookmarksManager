@@ -17,19 +17,12 @@ class EditModal extends Component {
     };
   }
 
-  handleDeleteLink = () => {
-
+  handleClose = () => {
     this.setState({isShown: false});
-
-  }
-
-  handleUpdateLink = () => {
-    
-    this.setState({isShown: true});
   }
   
   componentWillReceiveProps(newprops) {
-    console.log(newprops);
+
     this.setState({
         isShown: newprops.isShown, 
         linkId : newprops.linkId,
@@ -38,6 +31,10 @@ class EditModal extends Component {
         linkDetail : newprops.linkDetail
     });
   }
+
+  urlonChange = (e) => this.setState({ linkUrl: e.target.value});
+  titleonChange = (e) => this.setState({ linkTitle: e.target.value});
+  detailonChange = (e) => this.setState({ linkDetail: e.target.value});
 
   render() {
     
@@ -57,22 +54,22 @@ class EditModal extends Component {
 
                 <div className="form-group">
                     <label>linkId</label>
-                    <input type="text" className="form-control" name="linkId" id="linkId" value={linkId} readOnly/>
+                    <input type="text" className="form-control" name="linkId" id="linkId" defaultValue={linkId} readOnly/>
                 </div>
 
                 <div className="form-group">
                     <label>Link</label>
-                    <input type="text" className="form-control" name="url" id="urlEdit" placeholder="Edit url" value={linkUrl}/>
+                    <input type="text" className="form-control" name="url" id="urlEdit"  defaultValue={linkUrl} onChange={this.urlonChange}/>
                 </div>
 
                 <div className="form-group">
-                    <label for="title">Title</label>
-                    <input type="text" className="form-control" name="title" id="titleEdit" placeholder="Edit title" value={linkTitle}/>
+                    <label>Title</label>
+                    <input type="text" className="form-control" name="title" id="titleEdit" defaultValue={linkTitle} onChange={this.titleonChange}/>
                 </div>
 
                 <div className="form-group">
-                    <label for="title">Description</label>
-                    <input type="text" className="form-control" name="detail" id="descriptionEdit" placeholder="Edit Description" value={linkDetail}/>
+                    <label>Description</label>
+                    <input type="text" className="form-control" name="detail" id="descEdit" defaultValue={linkDetail} onChange={this.detailonChange}/>
                 </div>
 
             </form>
@@ -80,10 +77,10 @@ class EditModal extends Component {
           </Modal.Body>
 
           <Modal.Footer>
-            <Button variant="danger" onClick={this.handleDeleteLink}>
+            <Button variant="danger" onClick={this.props.handleDeleteLink.bind(this, linkId)}>
               Delete Link
             </Button>
-            <Button variant="success" onClick={this.handleUpdateLink}>
+            <Button variant="success" onClick={this.props.handleUpdateLink.bind(this, linkId, linkUrl,linkTitle,linkDetail)}>
               Save Changes
             </Button>
           </Modal.Footer>
@@ -96,6 +93,8 @@ class EditModal extends Component {
 // PropTypes
 EditModal.propTypes = {
     isShown: PropTypes.bool.isRequired,
+    handleDeleteLink: PropTypes.func.isRequired,
+    handleUpdateLink: PropTypes.func.isRequired
 }
 
 

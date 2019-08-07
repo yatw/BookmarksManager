@@ -74,25 +74,34 @@ router.post('/getTitle', urlencodedParser, function(req, res){
 });
 
 router.post('/addLink', urlencodedParser, function(req, res){
-  database.insertLink(req.body);
-  res.redirect("/");
+
+  database.insertLink(req.body, function(result) {
+    res.json(result);
+  });
+
 });
 
-router.post('/editLink', urlencodedParser, function(req, res){
-  database.updateLink(req.body);
-  res.redirect("/");
+router.post('/updateLink', urlencodedParser, function(req, res){
+
+  database.updateLink(req.body, function(result) {
+    res.json(result);
+  });
+
 });
 
 router.post('/deleteLink', urlencodedParser, function(req, res){
-  database.deleteLink(req.body);
-  res.redirect("/"); // this line doesn't redirect on its own for some reason, need to combine with ajax success function
-  // doesn't redirect becasue of the ajax post
-  //https://stackoverflow.com/questions/27202075/expressjs-res-redirect-not-working-as-expected
+
+  database.deleteLink(req.body, function(result) {
+    res.json(result);
+  });
+
 });
 
 router.post('/checkbox', urlencodedParser, function(req, res){
-  database.checkbox(req.body);
-  res.redirect("/");
+
+  database.checkbox(req.body, function(result) {
+    res.json(result);
+  });
 });
 
 router.post('/search', urlencodedParser, function(req, res){
