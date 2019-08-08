@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import LinkItem from './linkItem';
-import PropTypes from 'prop-types';
 import EditModal from '../../Modals/editModal';
+import PropTypes from 'prop-types';
 
 
 class LinksTable extends Component {
@@ -17,6 +17,13 @@ class LinksTable extends Component {
     };
   }
 
+  
+  componentWillReceiveProps(newprops) {
+    
+    fetch('/getLinks')
+    .then(res => res.json())
+    .then(links => this.setState({links}, () => console.log('Links fetched...', links)));
+  }
 
   componentDidMount() {
     fetch('/getLinks')
@@ -36,6 +43,7 @@ class LinksTable extends Component {
       body: JSON.stringify({field : field, status: !curState , linkId : id})
     }).then(
       
+      
       this.setState({links: this.state.links.map(link => {
 
         if (link.linkId === id){
@@ -48,10 +56,11 @@ class LinksTable extends Component {
         }
         return link;
      })})
+     
     ).catch((error) => {
       console.log(error);
     });
-
+    
   }
 
   handleDeleteLink = (todelete_id) => {
@@ -68,7 +77,9 @@ class LinksTable extends Component {
       
       // return all the link that the id do not match this id
        this.setState({links: [...this.state.links.filter(link => link.linkId !== todelete_id)] ,
-        editModalShown: false})
+        editModalShown: false}),
+        console.log(this.props),
+        this.props.updateNavCount()
 
 
     )
@@ -109,9 +120,11 @@ class LinksTable extends Component {
 
   }
 
-  
+  handleClose = () => {
+    this.setState({editModalShown: false});
+  }
 
-  handleEditClick = (id, url, title, detail) => {
+  handleOpen = (id, url, title, detail) => {
 
     this.setState({editModalShown:true, linkId: id, linkUrl: url, linkTitle: title, linkDetail : detail });
 
@@ -123,10 +136,11 @@ class LinksTable extends Component {
 
     return (
       <>
-        <EditModal isShown={this.state.editModalShown} linkId={linkId} linkUrl={linkUrl} linkTitle={linkTitle}  linkDetail={linkDetail} handleDeleteLink={this.handleDeleteLink} handleUpdateLink={this.handleUpdateLink} />
+        <EditModal isShown={this.state.editModalShown} linkId={linkId} linkUrl={linkUrl} linkTitle={linkTitle}  linkDetail={linkDetail} 
+        handleDeleteLink={this.handleDeleteLink} handleUpdateLink={this.handleUpdateLink} handleClose={this.handleClose}/>
 
         {this.state.links.map(link => (
-          <LinkItem key={link.linkId} link={link} checkboxToggle={this.checkboxToggle} handleEditClick={this.handleEditClick}/> 
+          <LinkItem key={link.linkId} link={link} checkboxToggle={this.checkboxToggle} handleOpen={this.handleOpen}/> 
         ))}
       </>
     );
@@ -135,6 +149,12 @@ class LinksTable extends Component {
   }
 }
 
+
+// PropTypes
+LinksTable.propTypes = {
+  updateNavCount: PropTypes.func.isRequired,
+  needUpdate: PropTypes.bool.isRequired
+}
 
 
 export default LinksTable

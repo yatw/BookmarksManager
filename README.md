@@ -19,8 +19,11 @@ This is a web app mainly for myself. I could simply paste in the url and click s
 #### Technologies
 
 The frontend is done in **React**, with casual **Bootstrap** and **CSS**
+
 The backend is written in **Node.js** with **Express** to handle client requests.
+
 The database used is **MySQL**
+
 The language used is **JavaScript**
 
 
@@ -48,6 +51,7 @@ The project is ongoing and not yet hosted.
 * Sorting
 * Pagination
 * Export Storage
+* Hosting
 
 #### Known Issue
 

@@ -40,7 +40,7 @@ router.post('/getTitle', urlencodedParser, function(req, res){
 
       request(url, function (error, response, body) {
 
-          if (!error && response.statusCode == 200) {
+          if (!error) {
 
             const $ = cheerio.load(body);
             var webpageTitle = $("title").text();
@@ -55,15 +55,17 @@ router.post('/getTitle', urlencodedParser, function(req, res){
             }
             
             const webpage = {
-              status: count == 0? "success" : "exist",
+              status: count == 0? "success" : "duplicate", 
               title: webpageTitle,
-              metaDescription: metaDescription
+              metaDescription: metaDescription,
+              statusCode: response.statusCode
             }
 
             res.send(webpage);
           }else{
               res.send({
-                  status: "fail"
+                  status: "fail",
+                  input: url
               })
           }
 
@@ -73,7 +75,7 @@ router.post('/getTitle', urlencodedParser, function(req, res){
     
 });
 
-router.post('/addLink', urlencodedParser, function(req, res){
+router.post('/insertLink', urlencodedParser, function(req, res){
 
   database.insertLink(req.body, function(result) {
     res.json(result);

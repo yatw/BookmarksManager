@@ -1,4 +1,6 @@
 import React, { Component } from 'react';
+import InsertModal from '../Modals/insertModal';
+import PropTypes from 'prop-types';
 
 
 class Nav extends Component {
@@ -6,8 +8,22 @@ class Nav extends Component {
     super();
     this.state = {
       linksTotal : 0,
-      categoryTotal : 0
+      categoryTotal : 0,
+      insertModalShown: false
     };
+  }
+  
+  componentWillReceiveProps(newprops) {
+    
+    fetch('/getLinksCount')
+      .then(res => res.json())
+      .then(res => this.setState({
+        
+        linksTotal: res[0].count,
+        categoryTotal: 3
+      
+      
+      }, () => console.log('LinksCount fetched...', res)));
   }
 
   componentDidMount() {
@@ -23,14 +39,40 @@ class Nav extends Component {
 
   }
 
+  handleInsertLink = (urlInput, titleInput, descInput) => {
+    
+    fetch("/insertLink", {
+      method: 'POST',
+      headers: {
+        Accept: 'application/json',
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({title : titleInput, url : urlInput, detail : descInput})
+    }).then(
+      
+      this.setState({insertModalShown:false}),
+      this.props.updateTable() // table component need update after the insert
+
+    )
+    .catch((error) => {
+      console.log(error);
+    });
+    
+
+  }
+
+  handleOpen = () => {
+    this.setState({insertModalShown:true});
+  }
+
+  handleClose = () => {
+    this.setState({insertModalShown: false});
+  }
+
   render() {
     return (  
 
-
-      
-
     <div className="sticky-top">
-
 
         <div className="banner">
             <p className="center">Information storage, embededd as links</p>
@@ -56,7 +98,7 @@ class Nav extends Component {
                 <button className="btn btn-success my-2 ml-sm-2 my-sm-0" type="submit">Search</button>
             </form>
             
-            <button type="button" className="btn btn-outline-primary ml-5 mx-auto" data-toggle="modal" data-target="#addNewModal">Add a new entry</button>
+            <button type="button" className="btn btn-outline-primary ml-5 mx-auto" onClick={this.handleOpen}>Add a new entry</button>
             
             <div className="navbar-nav">
                 <a className="nav-item nav-link active" href="#">Home <span className="sr-only">(current)</span></a>
@@ -66,56 +108,19 @@ class Nav extends Component {
             </div>
         </nav>
 
-              {/**Modal for insert 
-      <div className="modal fade" id="addNewModal" tabindex="-1" role="dialog" aria-labelledby="ModalLabel" aria-hidden="true">
-          <div className="modal-dialog" role="document">
-              <div className="modal-content">
-                  <div className="modal-header">
-                      <h5 className="modal-title" id="ModalLabel">Add a new link</h5>
-                      <button type="button" className="close" data-dismiss="modal" aria-label="Close">
-                      <span aria-hidden="true">&times;</span>
-                      </button>
-                  </div>
-
-
-                  <div className="modal-body">
-
-                      <form method="post" action="/addLink">
-                          <div className="form-group">
-                              <label>Link</label>
-                              <input type="text" className="form-control" name="url" id="urlInput" placeholder="Paste in url"/>
-                          </div>
-                          <div className="form-group">
-                                  <label for="title">Title</label>
-                                  <input type="text" className="form-control" name="title" id="titleInput" placeholder="Enter title"/>
-                          </div>
-                          <div className="form-group">
-                              <label for="title">Description</label>
-                              <input type="text" className="form-control" name="detail" id="descriptionInput" placeholder="Enter Description"/>
-                          </div>
-                        
-                          {/** 
-                          <div className="form-group">
-                                  <label for="category">Category</label>
-                                  <input type="text" className="form-control" name="inputCategory" placeholder="Where does it belong"/>
-                          </div>
-
-                          <div className="modal-footer">
-                              <p id="duplicateAlert" style={{color: 'red', visibility: 'hidden'}}>The exact same link is already stored in database</p>
-                              <button type="submit" className="btn btn-success" disabled id="submitButton">Save</button>
-                          </div>
-
-                      </form>
-                    
-                  </div>
-              </div>
-            </div>
-        </div>
-      */}
+        <InsertModal isShown={this.state.insertModalShown} handleInsertLink={this.handleInsertLink} handleClose={this.handleClose}/>
       </div>  
 
     );
   }
 }
+
+// PropTypes
+Nav.propTypes = {
+  updateTable: PropTypes.func.isRequired,
+  needUpdate: PropTypes.bool.isRequired
+
+}
+
 
 export default Nav;

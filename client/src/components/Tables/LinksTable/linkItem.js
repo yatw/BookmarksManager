@@ -38,7 +38,7 @@ export class LinkItem extends Component {
                 <td><i className={this.getReadClass()} style={{fontSize:'30px', color:'#02cf32'}} onClick={this.props.checkboxToggle.bind(this, linkId, 'completed', completed)}></i></td>
 
                 {/*Edit */}
-                <td><i className="fas fa-edit fa-clickable" style={{fontSize:'30px', color:'#ff9933'}} onClick={this.props.handleEditClick.bind(this, linkId, url, title, detail )}></i></td>
+                <td><i className="fas fa-edit fa-clickable" style={{fontSize:'30px', color:'#ff9933'}} onClick={this.props.handleOpen.bind(this, linkId, url, title, detail )}></i></td>
             </tr>
         );
     }
@@ -48,7 +48,7 @@ export class LinkItem extends Component {
 LinkItem.propTypes = {
     link: PropTypes.object.isRequired,
     checkboxToggle: PropTypes.func.isRequired,
-    handleEditClick: PropTypes.func.isRequired
+    handleOpen: PropTypes.func.isRequired
 }
 
   

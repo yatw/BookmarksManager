@@ -8,7 +8,6 @@ class EditModal extends Component {
     super(props);
 
     this.state = {
-        isShown: this.props.isShown,
         linkId : null,
         linkUrl : null,
         linkTitle : null,
@@ -17,14 +16,11 @@ class EditModal extends Component {
     };
   }
 
-  handleClose = () => {
-    this.setState({isShown: false});
-  }
+
   
   componentWillReceiveProps(newprops) {
 
     this.setState({
-        isShown: newprops.isShown, 
         linkId : newprops.linkId,
         linkUrl : newprops.linkUrl,
         linkTitle : newprops.linkTitle,
@@ -35,6 +31,7 @@ class EditModal extends Component {
   urlonChange = (e) => this.setState({ linkUrl: e.target.value});
   titleonChange = (e) => this.setState({ linkTitle: e.target.value});
   detailonChange = (e) => this.setState({ linkDetail: e.target.value});
+  
 
   render() {
     
@@ -43,14 +40,14 @@ class EditModal extends Component {
     return (
 
         <>
-        <Modal show={this.state.isShown} onHide={this.handleClose}>
+        <Modal show={this.props.isShown} onHide={this.props.handleClose}>
           <Modal.Header closeButton>
             <Modal.Title>Edit a link</Modal.Title>
           </Modal.Header>
            
           <Modal.Body>
 
-            <form method="post" action="/editLink">
+            <form method="post">
 
                 <div className="form-group">
                     <label>linkId</label>
@@ -93,6 +90,7 @@ class EditModal extends Component {
 // PropTypes
 EditModal.propTypes = {
     isShown: PropTypes.bool.isRequired,
+    handleClose: PropTypes.func.isRequired,
     handleDeleteLink: PropTypes.func.isRequired,
     handleUpdateLink: PropTypes.func.isRequired
 }

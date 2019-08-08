@@ -31,7 +31,7 @@ app.use('/getLinks', require('./routes/route'));
 app.use('/getLinksCount', require('./routes/route'));
 app.use('/getTitle', require('./routes/route'));
 app.use('/addLink', require('./routes/route'));
-app.use('/editLink', require('./routes/route'));
+app.use('/updateLink', require('./routes/route'));
 app.use('/deleteLink', require('./routes/route'));
 app.use('/checkbox', require('./routes/route'));
 app.use('/search', require('./routes/route'));
