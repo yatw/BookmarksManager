@@ -109,8 +109,7 @@ router.post('/checkbox', urlencodedParser, function(req, res){
 router.post('/search', urlencodedParser, function(req, res){
 
   database.search(req.body, function(result) {
-    console.log(result);
-    res.render("home", {links: result});
+    res.json(result);
   });
 });
 

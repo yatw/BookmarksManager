@@ -36,19 +36,19 @@ The project is ongoing and not yet hosted.
 
 ##### Completed
 
-* Inserted to database
+* Insert Modal
+* Edit Modal (with Delete)
 * Star toggle
 * Complete toggle
 * Automatic extract website detail
 * Automatic generate create date
-* Edit Modal
+* Search
+* Prevent duplication
 
 ##### Todo
 
-* Insert Modal
-* Search Component
-* Categories
 * Sorting
+* Categories
 * Pagination
 * Export Storage
 * Hosting

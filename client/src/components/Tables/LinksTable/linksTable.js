@@ -19,16 +19,60 @@ class LinksTable extends Component {
 
   
   componentWillReceiveProps(newprops) {
+
+    if (newprops.needUpdate){
     
+      this.displayAll();
+
+    }
+
+    if (newprops.searchTerm != null){
+
+      const query = newprops.searchTerm;
+
+      if (query.length > 2){
+
+        this.doSearch(query);
+
+      }else if (query.length === 0)
+      
+        this.displayAll();
+    }
+    
+
+  }
+
+  doSearch(query){
+
+    fetch("/search", {
+      method: 'POST',
+      headers: {
+        Accept: 'application/json',
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({query : query})
+    
+    })
+    .then(res => res.json())
+    .then(
+
+       links => this.setState({links}) 
+     
+    ).catch((error) => {
+      console.log(error);
+    });
+  }
+
+  displayAll(){
     fetch('/getLinks')
     .then(res => res.json())
     .then(links => this.setState({links}, () => console.log('Links fetched...', links)));
   }
 
   componentDidMount() {
-    fetch('/getLinks')
-      .then(res => res.json())
-      .then(links => this.setState({links}, () => console.log('Links fetched...', links)));
+
+    this.displayAll();
+
   }
 
   checkboxToggle = (id, field, curState) => {
@@ -153,7 +197,8 @@ class LinksTable extends Component {
 // PropTypes
 LinksTable.propTypes = {
   updateNavCount: PropTypes.func.isRequired,
-  needUpdate: PropTypes.bool.isRequired
+  needUpdate: PropTypes.bool.isRequired,
+  searchTerm: PropTypes.string.isRequired
 }
 
 

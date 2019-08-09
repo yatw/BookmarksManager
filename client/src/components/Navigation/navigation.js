@@ -14,16 +14,19 @@ class Nav extends Component {
   }
   
   componentWillReceiveProps(newprops) {
+
+    if (newprops.needUpdate){
     
-    fetch('/getLinksCount')
-      .then(res => res.json())
-      .then(res => this.setState({
+      fetch('/getLinksCount')
+        .then(res => res.json())
+        .then(res => this.setState({
+          
+          linksTotal: res[0].count,
+          categoryTotal: 3
         
-        linksTotal: res[0].count,
-        categoryTotal: 3
-      
-      
-      }, () => console.log('LinksCount fetched...', res)));
+        
+        }, () => console.log('LinksCount fetched...', res)));
+    }
   }
 
   componentDidMount() {
@@ -57,9 +60,10 @@ class Nav extends Component {
     .catch((error) => {
       console.log(error);
     });
-    
-
+  
   }
+
+  
 
   handleOpen = () => {
     this.setState({insertModalShown:true});
@@ -67,6 +71,10 @@ class Nav extends Component {
 
   handleClose = () => {
     this.setState({insertModalShown: false});
+  }
+
+  onSearchInput = (e) => {
+    this.props.handleSearch( e.target.value);
   }
 
   render() {
@@ -94,31 +102,25 @@ class Nav extends Component {
             </span>
             
             <form className="row ml-5">
-                <input type="text" className="form-control search-query bar-size" placeholder="Search" id="searchBox"/>
-                <button className="btn btn-success my-2 ml-sm-2 my-sm-0" type="submit">Search</button>
+                <input type="text" className="form-control search-query bar-size" placeholder="Search" onChange={this.onSearchInput}/>
             </form>
             
             <button type="button" className="btn btn-outline-primary ml-5 mx-auto" onClick={this.handleOpen}>Add a new entry</button>
             
-            <div className="navbar-nav">
-                <a className="nav-item nav-link active" href="#">Home <span className="sr-only">(current)</span></a>
-                <a className="nav-item nav-link" href="#">About</a>
-                <a className="nav-item nav-link" href="#">Pricing</a>
-                <a className="nav-item nav-link disabled" href="#">Disabled</a>
-            </div>
         </nav>
 
         <InsertModal isShown={this.state.insertModalShown} handleInsertLink={this.handleInsertLink} handleClose={this.handleClose}/>
       </div>  
 
     );
+    }
   }
-}
 
-// PropTypes
-Nav.propTypes = {
-  updateTable: PropTypes.func.isRequired,
-  needUpdate: PropTypes.bool.isRequired
+  // PropTypes
+  Nav.propTypes = {
+    updateTable: PropTypes.func.isRequired,
+    handleSearch: PropTypes.func.isRequired,
+    needUpdate: PropTypes.bool.isRequired
 
 }
 

@@ -10,9 +10,11 @@ class App extends Component{
     super();
     this.updateTable = this.updateTable.bind(this);
     this.updateNavCount = this.updateNavCount.bind(this);
+    this.handleSearch = this.handleSearch.bind(this);
     this.state = {
       TableUpdate : false,
-      NavCountUpdate: false
+      NavCountUpdate: false,
+      searchTerm: null
     };
   }
 
@@ -24,6 +26,10 @@ class App extends Component{
     this.setState({updateNavCount : true})
   }
 
+  handleSearch(searchTerm){
+    this.setState({searchTerm : searchTerm, TableUpdate: false})
+  }
+
 
   render(){
 
@@ -31,7 +37,7 @@ class App extends Component{
 
       <div className="container-fluid">
 
-        <Nav updateTable={this.updateTable} needUpdate={this.state.NavCountUpdate}/>
+        <Nav updateTable={this.updateTable} needUpdate={this.state.NavCountUpdate} handleSearch={this.handleSearch}/>
                 
         <button type="button" className="btn btn-primary">Primary</button>
         <button type="button" className="btn btn-primary">Primary</button>
@@ -52,7 +58,7 @@ class App extends Component{
           </thead>
 
           <tbody>
-            <LinksTable updateNavCount={this.updateNavCount} needUpdate={this.state.TableUpdate} />
+            <LinksTable updateNavCount={this.updateNavCount} needUpdate={this.state.TableUpdate} searchTerm={this.state.searchTerm}/>
           </tbody>
           
         </table>

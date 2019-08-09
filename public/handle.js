@@ -1,4 +1,4 @@
-
+/*
 var urlField = document.getElementById('urlInput');
 var titleField = document.getElementById('titleInput');
 var descriptionField = document.getElementById('descriptionInput');
@@ -210,3 +210,4 @@ $('#searchBox').on('input', function() {
     }
      
 });
+*/

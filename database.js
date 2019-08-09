@@ -77,12 +77,15 @@ function getLinksCount(callback){
 }
 
 function search(input, callback){
-  usedatabase();
+  usedatabase();  
 
-  db.query('SELECT * FROM links WHERE ( title LIKE ? OR detail LIKE ?)', [input.query, input.query], (err, result) => {
+  var q = db.query('SELECT * FROM links WHERE ( title LIKE ? OR detail LIKE ?)', ['%'+ input.query + '%', '%' + input.query + '%'], (err, result) => {
       if (err) throw err;
       callback(result);
   });
+
+  console.log(q.sql);
+
 }
 
 function checkExist(input, callback){
@@ -93,7 +96,6 @@ function checkExist(input, callback){
       callback(result[0]);
   });
 
-  //console.log(query.sql);
 }
 
 
