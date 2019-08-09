@@ -5,61 +5,77 @@ const moment = require('moment');
 //https://stackoverflow.com/questions/50093144/mysql-8-0-client-does-not-support-authentication-protocol-requested-by-server
 // run in mysql
 //ALTER USER 'root'@'localhost' IDENTIFIED WITH mysql_native_password BY 'smooth';
-var db = mysql.createConnection({
-  host     : 'localhost',
-  user     : 'root',
-  password: 'smooth',
+
+const db_config = {
+  host     : 'us-cdbr-iron-east-02.cleardb.net',
+  user     : 'bc0f607f95daca',
+  password : '97ff4423',
+  database : "heroku_af4745ddf02c336",
   dateStrings: 'date'
-});
+};
 
-db.connect((err) => { 
-if (err){
-    console.log('Error connecting to MySQL...');
-    throw err;
-}else{
-  console.log('MySQL connected...');
+var connection;
+
+// https://stackoverflow.com/questions/20210522/nodejs-mysql-error-connection-lost-the-server-closed-the-connection
+function handleDisconnect() {
+  connection = mysql.createConnection(db_config); // Recreate the connection, since
+                                                  // the old one cannot be reused.
+
+  connection.connect(function(err) {              // The server is either down
+    if(err) {                                     // or restarting (takes a while sometimes).
+      console.log('Error when connecting to db:', err);
+      setTimeout(handleDisconnect, 2000); // We introduce a delay before attempting to reconnect,
+    }else{
+      console.log('MySQL connected ...');
+    }                                     // to avoid a hot loop, and to allow our node script to
+  });                                     // process asynchronous requests in the meantime.
+                                          // If you're also serving http, display a 503 error.
+  connection.on('error', function(err) {
+    console.log('db error', err);
+    if(err.code === 'PROTOCOL_CONNECTION_LOST') { // Connection to the MySQL server is usually
+      handleDisconnect();                         // lost due to either server restart, or a
+    } else {                                      // connnection idle timeout (the wait_timeout
+      console.log("throw error");
+      throw err;                                  // server variable configures this)
+    }
+  });
 }
-});
 
-function usedatabase(){
+handleDisconnect();
 
-  db.query('USE infoCluster',  (err, result) => {
-      if (err) throw err;
-   }); 
-}
 
 function insertLink (input) {
-  usedatabase();
+ //usedatabase();
 
   input['createdDate'] = moment(Date.now()).format('YYYY-MM-DD');
   input['star'] = false;
   input['completed'] = false;
   
-  db.query('INSERT INTO links SET ?', input,  (err, result) => {
+  connection.query('INSERT INTO links SET ?', input,  (err, result) => {
       if (err) throw err;
   });  
 }
 
 function updateLink (input) {
-  usedatabase();
+  //usedatabase();
 
-  db.query('UPDATE links SET url = ?, title = ?, detail = ? WHERE linkId = ?', [input.url, input.title, input.detail, input.linkId],  (err, result) => {
+  connection.query('UPDATE links SET url = ?, title = ?, detail = ? WHERE linkId = ?', [input.url, input.title, input.detail, input.linkId],  (err, result) => {
       if (err) throw err;
   });  
 }
 
 function deleteLink (input) {
-  usedatabase();
+  //usedatabase();
 
-  db.query('DELETE FROM links WHERE linkId = ?;', [input.linkId],  (err, result) => {
+  connection.query('DELETE FROM links WHERE linkId = ?;', [input.linkId],  (err, result) => {
     if (err) throw err;
   });
 }
 
 function getLinks(callback){
-  usedatabase();
+  //usedatabase();
   
-  db.query('SELECT * FROM links;',  (err, result) => {
+  connection.query('SELECT * FROM links;',  (err, result) => {
       if (err) throw err;
       callback(result);
   });
@@ -67,9 +83,9 @@ function getLinks(callback){
 }
 
 function getLinksCount(callback){
-  usedatabase();
+  //usedatabase();
   
-  db.query('SELECT COUNT(*) as count FROM links;',  (err, result) => {
+  connection.query('SELECT COUNT(*) as count FROM links;',  (err, result) => {
       if (err) throw err;
       callback(result);
   });
@@ -77,9 +93,9 @@ function getLinksCount(callback){
 }
 
 function search(input, callback){
-  usedatabase();  
+  //usedatabase();  
 
-  var q = db.query('SELECT * FROM links WHERE ( title LIKE ? OR detail LIKE ?)', ['%'+ input.query + '%', '%' + input.query + '%'], (err, result) => {
+  var q = connection.query('SELECT * FROM links WHERE ( title LIKE ? OR detail LIKE ?)', ['%'+ input.query + '%', '%' + input.query + '%'], (err, result) => {
       if (err) throw err;
       callback(result);
   });
@@ -89,9 +105,9 @@ function search(input, callback){
 }
 
 function checkExist(input, callback){
-  usedatabase();
+  //usedatabase();
 
-  var query = db.query('SELECT COUNT(*) as count FROM links WHERE url=?', [input], (err, result) => {
+  var query = connection.query('SELECT COUNT(*) as count FROM links WHERE url=?', [input], (err, result) => {
       if (err) throw err;
       callback(result[0]);
   });
@@ -101,9 +117,9 @@ function checkExist(input, callback){
 
 // both star and read are checkbox and use this function
 function checkbox(input){
-  usedatabase();
+  //usedatabase();
 
-  db.query('UPDATE links SET ?? = ? WHERE linkId = ?;', [input.field, input.status, input.linkId], (err, result) => {
+  connection.query('UPDATE links SET ?? = ? WHERE linkId = ?;', [input.field, input.status, input.linkId], (err, result) => {
       if (err) throw err;
   });
 }

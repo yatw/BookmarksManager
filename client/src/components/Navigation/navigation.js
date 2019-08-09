@@ -53,7 +53,7 @@ class Nav extends Component {
       body: JSON.stringify({title : titleInput, url : urlInput, detail : descInput})
     }).then(
       
-      this.setState({insertModalShown:false}),
+      this.setState({insertModalShown:false, linksTotal : this.state.linksTotal+1} ),
       this.props.updateTable() // table component need update after the insert
 
     )
@@ -87,9 +87,8 @@ class Nav extends Component {
         </div> 
 
         <nav className="navbar navbar-expand-lg">
-
             
-            <a className="navbar-brand" style={{cursor: 'pointer'}} onClick={() => window.open('https://github.com/yatw/Bookmark')}>
+            <a className="navbar-brand" style={{cursor: 'pointer'}} href= 'https://github.com/yatw/Bookmark' target="_blank" rel="noopener noreferrer">
                 <img src="images/logo.jpg" width="60" height="60" alt=""/>
             </a>
             

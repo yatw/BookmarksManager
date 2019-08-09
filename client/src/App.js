@@ -19,11 +19,11 @@ class App extends Component{
   }
 
   updateTable(){
-    this.setState({needUpdate : true})
+    this.setState({TableUpdate : true})
   }
 
   updateNavCount(){
-    this.setState({updateNavCount : true})
+    this.setState({NavCountUpdate : true})
   }
 
   handleSearch(searchTerm){

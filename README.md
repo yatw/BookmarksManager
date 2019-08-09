@@ -2,6 +2,7 @@
 
 A full-stack web app to store and organize useful information for future reference
 
+It is currently hosted on [Heroku](https://yatw-bookmark.herokuapp.com/)
 
 ## About the project
 
@@ -26,11 +27,12 @@ The database used is **MySQL**
 
 The language used is **JavaScript**
 
+Hosted on **Heroku** and **ClearDB MySQL**
+
 
 #### Status
 
-The project is ongoing and not yet hosted.
-
+The project is ongoing but most of the important features are completed.
 
 ### Tasks
 
@@ -44,6 +46,7 @@ The project is ongoing and not yet hosted.
 * Automatic generate create date
 * Search
 * Prevent duplication
+* Hosting
 
 ##### Todo
 
@@ -51,22 +54,21 @@ The project is ongoing and not yet hosted.
 * Categories
 * Pagination
 * Export Storage
-* Hosting
 
 #### Known Issue
+
+1. ClearDB MySQL will automatically disconnect as explained [here](https://stackoverflow.com/questions/18433124/heroku-and-nodejs-mysql-connection-lost-the-server-closed-the-connection), this sometimes causes delay because server has to establish a new connection
+
 
   
 
 ## Instructions
 
-  
-  
+
+
+
 
 ### Dependencies
-
-  
-
-
 
 **Note that the following was done in Window OS**
 ```
@@ -95,3 +97,27 @@ To start front end react server
 cd client
 npm start
 ```
+
+### Deploying to Heroku
+
+In the backend `package.json` file, Heroku will use `npm start` to start the server.
+`heroku-postbuild` is used to start the frontend react server
+
+```
+  "scripts": {
+    "start": "node server.js",
+    "dev": "nodemon app --ignore client",
+    "heroku-postbuild": "cd client && npm install && npm run build"
+  },
+```
+Start the project on Heroku
+```
+heroku login // enter in your credentials
+heroku create [project-name]
+git add .
+git commit -m "react-create-app on Heroku"
+git push heroku master
+heroku open
+```
+
+[Complete Guide](https://medium.com/@chloechong.us/how-to-deploy-a-create-react-app-with-an-express-backend-to-heroku-32decfee6d18)

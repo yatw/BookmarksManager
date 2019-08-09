@@ -4,8 +4,9 @@
   "description": "```\r npm init -y\r npm install express\r npm install -D nodemon\r ```",
   "main": "server.js",
   "scripts": {
-    "start": "node app",
-    "dev": "nodemon app --ignore client"
+    "start": "node server.js",
+    "dev": "nodemon app --ignore client",
+    "heroku-postbuild": "cd client && npm install && npm run build"
   },
   "keywords": [],
   "author": "",

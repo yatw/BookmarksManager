@@ -26,7 +26,7 @@ export class LinkItem extends Component {
                 <td><i className={this.getStarClass()} style={{fontSize:'20px', color:'#FFD700'}} onClick={this.props.checkboxToggle.bind(this, linkId, 'star', star)}></i></td>
               
                 {/*Title */}
-                <td><a href= {this.props.link.url} target="_blank">{title}</a></td>
+                <td><a href= {this.props.link.url} target="_blank" rel="noopener noreferrer">{title}</a></td>
 
                 {/*Description */}
                 <td>{detail}</td>
