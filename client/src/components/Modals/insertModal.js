@@ -41,11 +41,12 @@ class InsertModal extends Component {
 
   urlonChange = (e) => {
 
+
     var inputUrl = e.target.value;
     document.getElementById("titleInput").value = "Loading...";
     document.getElementById("descInput").value = "Loading...";
     this.setState({ urlInput: inputUrl, isDuplicate: false});
-
+    
     fetch("/getTitle", {
         method: 'POST',
         headers: {
@@ -57,7 +58,7 @@ class InsertModal extends Component {
       }).then(response => response.json())
       .then(data => {
 
-        
+        console.log("back");
         if (data.status === "success"){
             
             this.setState({ titleInput: data.title,
@@ -82,8 +83,10 @@ class InsertModal extends Component {
             this.setState({ borderColor: '#ff8080'})
         }
       }).catch((error) => {
-          console.log(error);
+          console.log(JSON.parse(error));
       });
+
+      
   }
 
 

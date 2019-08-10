@@ -89,7 +89,7 @@ class Nav extends Component {
         <nav className="navbar navbar-expand-lg">
             
             <a className="navbar-brand" style={{cursor: 'pointer'}} href= 'https://github.com/yatw/Bookmark' target="_blank" rel="noopener noreferrer">
-                <img src="images/logo.jpg" width="60" height="60" alt=""/>
+                <img src="logo.jpg" width="60" height="60" alt=""/>
             </a>
             
             <button className="navbar-toggler" type="button">

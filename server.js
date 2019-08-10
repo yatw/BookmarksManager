@@ -6,23 +6,21 @@ const app = express();
 
 app.use(function(req, res, next) {
 
-    res.header("Access-Control-Allow-Origin", "*");
-  
-    res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
-  
-    next();
-  
-  });
+  res.header("Access-Control-Allow-Origin", "*");
 
-// set up static folder
-app.use(express.static(path.join(__dirname, 'public')));
+  res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
 
+  next();
+
+});
+
+// needed for auto extract title and detail
 // parse application/x-www-form-urlencoded 
 app.use(bodyParser.urlencoded({ extended: false }))
 app.use(bodyParser.json())
 
-// set up view engine
-app.set('view engine', 'ejs');
+// Serve static files from the React frontend app
+app.use(express.static(path.join(__dirname, 'client/build')))
 
 
 // set up routes
@@ -36,6 +34,9 @@ app.use('/deleteLink', require('./routes/route'));
 app.use('/checkbox', require('./routes/route'));
 app.use('/search', require('./routes/route'));
 app.use('*', require('./routes/route'));
+
+
+
 
 
 

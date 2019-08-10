@@ -1,7 +1,7 @@
 {
   "name": "Bookmark",
   "version": "1.0.0",
-  "description": "```\r npm init -y\r npm install express\r npm install -D nodemon\r ```",
+  "description": "My bookmark",
   "main": "server.js",
   "scripts": {
     "start": "node server.js",

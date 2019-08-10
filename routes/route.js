@@ -8,14 +8,6 @@ const cheerio = require('cheerio');
 var urlencodedParser = bodyParser.urlencoded({ extended: false });
 
 
-
-router.get('/', (req, res) => {
-  
-  database.getLinks(function(result) {
-      res.render("home", {links: result});
-  });
-});
-
 router.get('/getLinks', (req, res) => {
   
   database.getLinks(function(result) {
@@ -113,8 +105,10 @@ router.post('/search', urlencodedParser, function(req, res){
   });
 });
 
+
 router.get('*', (req, res) => {
-    res.send("404 page not found");
+
+   res.send("404 page not found");
 });
 
 

@@ -14,7 +14,7 @@ class App extends Component{
     this.state = {
       TableUpdate : false,
       NavCountUpdate: false,
-      searchTerm: null
+      searchTerm: ""
     };
   }
 

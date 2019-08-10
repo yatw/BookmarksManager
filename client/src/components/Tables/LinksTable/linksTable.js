@@ -64,13 +64,18 @@ class LinksTable extends Component {
   }
 
   displayAll(){
+    
     fetch('/getLinks')
+    
     .then(res => res.json())
-    .then(links => this.setState({links}, () => console.log('Links fetched...', links)));
+    .then(links => this.setState({links}, () => console.log('Links fetched...', links))
+    .catch((error) => {
+      console.log(JSON.parse(error));
+    }))
+    
   }
 
   componentDidMount() {
-
     this.displayAll();
 
   }
