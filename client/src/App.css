@@ -4,7 +4,6 @@ html, body{
 
 .container-fluid{
   width: 96%;
-  height: 4000px;
   background: #ffffff;
   padding: 0;
 }
@@ -22,9 +21,9 @@ html, body{
 
 .navbar{
   padding-left: 0;
-  height: 60px;
   background: #ffffcc;
 }
+
 
 .center{
   text-align: center;
@@ -35,16 +34,8 @@ html, body{
 }
 
 .modal {
-  top: 20%;
-}
-
-.warningbox{
-  border-color: #ff8080;
-}
-
-.successbox{
-  border-color: #00b300;
-}
+  top: 5%;
+} 
 
 .fa-clickable {
   cursor:pointer;
@@ -118,3 +109,10 @@ html, body{
   -ms-transform: rotate(45deg);
   transform: rotate(45deg);
 }
+
+@media (max-width: 400px) {
+  .banner p{
+    font-size: 16pt;
+    color: #1a75ff;
+  }
+ }

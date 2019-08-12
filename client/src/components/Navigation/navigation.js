@@ -12,34 +12,33 @@ class Nav extends Component {
       insertModalShown: false
     };
   }
+
+  updateCounts(){
+
+    fetch('/getLinksCount')
+    .then(res => res.json())
+    .then(res => this.setState({
+      
+      linksTotal: res[0].count,
+      categoryTotal: 3
+    
+    
+    }))
+    .catch((error) => {
+      console.log(error);
+    });
+
+  }
   
   componentWillReceiveProps(newprops) {
 
     if (newprops.needUpdate){
-    
-      fetch('/getLinksCount')
-        .then(res => res.json())
-        .then(res => this.setState({
-          
-          linksTotal: res[0].count,
-          categoryTotal: 3
-        
-        
-        }, () => console.log('LinksCount fetched...', res)));
+      this.updateCounts();
     }
   }
 
-  componentDidMount() {
-    fetch('/getLinksCount')
-      .then(res => res.json())
-      .then(res => this.setState({
-        
-        linksTotal: res[0].count,
-        categoryTotal: 3
-      
-      
-      }, () => console.log('LinksCount fetched...', res)));
-
+  componentDidMount(){
+    this.updateCounts();
   }
 
   handleInsertLink = (urlInput, titleInput, descInput) => {
@@ -83,30 +82,34 @@ class Nav extends Component {
     <div className="sticky-top">
 
         <div className="banner">
-            <p className="center">Information storage, embededd as links</p>
+            <p className="center">Information storage</p>
         </div> 
 
+    
+          
         <nav className="navbar navbar-expand-lg">
-            
-            <a className="navbar-brand" style={{cursor: 'pointer'}} href= 'https://github.com/yatw/Bookmark' target="_blank" rel="noopener noreferrer">
-                <img src="logo.jpg" width="60" height="60" alt=""/>
-            </a>
-            
-            <button className="navbar-toggler" type="button">
-              <span className="navbar-toggler-icon"></span>
-            </button>
 
-            <span className="navbar-text ml-3">
-            Stored {this.state.linksTotal} entries in {this.state.categoryTotal} categories
-            </span>
-            
-            <form className="row ml-5">
-                <input type="text" className="form-control search-query bar-size" placeholder="Search" onChange={this.onSearchInput}/>
-            </form>
-            
-            <button type="button" className="btn btn-outline-primary ml-5 mx-auto" onClick={this.handleOpen}>Add a new entry</button>
-            
+
+            <a style={{cursor: 'pointer'}} href= 'https://github.com/yatw/Bookmark' target="_blank" rel="noopener noreferrer">
+              <img id="logo" className="navbar-brand" src="logo.jpg" alt=""/>
+            </a>
+
+
+            <div className="collapse navbar-collapse">
+          
+                <span className="navbar-text mr-5 ">
+                  Stored {this.state.linksTotal} entries in {this.state.categoryTotal} categories
+                </span>
+    
+                
+                <input type="text" className="form-control search-query mr-5 bar-size" placeholder="Search" onChange={this.onSearchInput}/>
+                
+                <button type="button" className="btn btn-outline-primary" onClick={this.handleOpen}>Add a new entry</button>
+                
+            </div>
+
         </nav>
+          
 
         <InsertModal isShown={this.state.insertModalShown} handleInsertLink={this.handleInsertLink} handleClose={this.handleClose}/>
       </div>  

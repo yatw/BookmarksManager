@@ -64,14 +64,21 @@ class LinksTable extends Component {
   }
 
   displayAll(){
-    
-    fetch('/getLinks')
-    
-    .then(res => res.json())
-    .then(links => this.setState({links}, () => console.log('Links fetched...', links))
+
+    fetch("/getLinks", {
+      method: 'GET',
+      headers: {
+        Accept: 'application/json',
+        'Content-Type': 'application/json',
+      }    
+    })
+    .then(response => response.json())
+    .then(data => {
+        this.setState({ links: data })
+    })
     .catch((error) => {
-      console.log(JSON.parse(error));
-    }))
+      console.log(error);
+    });
     
   }
 
@@ -181,6 +188,8 @@ class LinksTable extends Component {
   
   render() {
 
+
+    var linkNum = 1;
     const {linkId, linkUrl, linkTitle, linkDetail} = this.state;
 
     return (
@@ -189,7 +198,7 @@ class LinksTable extends Component {
         handleDeleteLink={this.handleDeleteLink} handleUpdateLink={this.handleUpdateLink} handleClose={this.handleClose}/>
 
         {this.state.links.map(link => (
-          <LinkItem key={link.linkId} link={link} checkboxToggle={this.checkboxToggle} handleOpen={this.handleOpen}/> 
+          <LinkItem key={link.linkId} linkNum={linkNum++} link={link} checkboxToggle={this.checkboxToggle} handleOpen={this.handleOpen}/> 
         ))}
       </>
     );

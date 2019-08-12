@@ -17,10 +17,11 @@ export class LinkItem extends Component {
     
     render() {
         const {linkId, title, detail, star, completed, url} = this.props.link;
+
         return (
             <tr>
                 {/*linkId */}
-                <td id="linkId">{this.props.link.linkId}</td>
+                <td id="linkId">{this.props.linkNum}</td>
 
                 {/*Star */}
                 <td><i className={this.getStarClass()} style={{fontSize:'20px', color:'#FFD700'}} onClick={this.props.checkboxToggle.bind(this, linkId, 'star', star)}></i></td>

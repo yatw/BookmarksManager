@@ -39,11 +39,7 @@ class App extends Component{
 
         <Nav updateTable={this.updateTable} needUpdate={this.state.NavCountUpdate} handleSearch={this.handleSearch}/>
                 
-        <button type="button" className="btn btn-primary">Primary</button>
-        <button type="button" className="btn btn-primary">Primary</button>
-        <button type="button" className="btn btn-primary">Primary</button>
 
-        <hr/>
         <table className="table table-striped">
           <thead>
             <tr>

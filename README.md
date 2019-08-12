@@ -2,7 +2,7 @@
 
 A full-stack web app to store and organize useful information for future reference
 
-It is currently hosted on [Heroku](https://yatw-bookmark.herokuapp.com/)
+[Demo available here](https://yatw-bookmark.herokuapp.com/)
 
 ## About the project
 
@@ -19,15 +19,11 @@ This is a web app mainly for myself. I could simply paste in the url and click s
 
 #### Technologies
 
-The frontend is done in **React**, with casual **Bootstrap** and **CSS**
-
-The backend is written in **Node.js** with **Express** to handle client requests.
-
-The database used is **MySQL**
-
-The language used is **JavaScript**
-
-Hosted on **Heroku** and **ClearDB MySQL**
+- **Frontend**: React, Bootstrap, CSS
+- **Backend**:  Node.js, Express
+- **Database**: MySQL
+- **Language**: JavaScript
+- **Deployment**: Heroku, ClearDB MySQL
 
 
 #### Status
@@ -36,37 +32,28 @@ The project is ongoing but most of the important features are completed.
 
 ### Tasks
 
-##### Completed
+- [x] Insert Modal
+- [x] Edit Modal (with Delete)
+- [x] Star toggle
+- [x] Complete toggle
+- [x] Automatic extract website information
+- [x] Automatic generate create date
+- [x] Filter on search
+- [x] Prevent duplication
+- [x] Hosting
+- [ ] Sorting
+- [ ] Create Categories
+- [ ] Pagination
+- [ ] Export Storage
 
-* Insert Modal
-* Edit Modal (with Delete)
-* Star toggle
-* Complete toggle
-* Automatic extract website detail
-* Automatic generate create date
-* Search
-* Prevent duplication
-* Hosting
-
-##### Todo
-
-* Sorting
-* Categories
-* Pagination
-* Export Storage
 
 #### Known Issue
 
 1. ClearDB MySQL will automatically disconnect as explained [here](https://stackoverflow.com/questions/18433124/heroku-and-nodejs-mysql-connection-lost-the-server-closed-the-connection), this sometimes causes delay because server has to establish a new connection
 
-
-  
+2. Sometimes Bootstrap can't load due to ```Cross-Origin Request Blocked: The Same Origin Policy disallows reading the remote resource at https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css. (Reason: CORS request did not succeed).```
 
 ## Instructions
-
-
-
-
 
 ### Dependencies
 
@@ -100,8 +87,13 @@ npm start
 
 ### Deploying to Heroku
 
+Make sure to do delete ```build``` folder inside client and then do ```npm run build``` to get ready for production
+
 In the backend `package.json` file, Heroku will use `npm start` to start the server.
 `heroku-postbuild` is used to start the frontend react server
+
+
+Start react server with ```npm run build``` instead of the usual ```npm start```, otherwise Heroku build will not complete
 
 ```
   "scripts": {
@@ -110,6 +102,9 @@ In the backend `package.json` file, Heroku will use `npm start` to start the ser
     "heroku-postbuild": "cd client && npm install && npm run build"
   },
 ```
+
+
+
 Start the project on Heroku
 ```
 heroku login // enter in your credentials
@@ -120,4 +115,4 @@ git push heroku master
 heroku open
 ```
 
-[Complete Guide](https://medium.com/@chloechong.us/how-to-deploy-a-create-react-app-with-an-express-backend-to-heroku-32decfee6d18)
+[Relevant Guide](https://medium.com/@chloechong.us/how-to-deploy-a-create-react-app-with-an-express-backend-to-heroku-32decfee6d18)
