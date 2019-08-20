@@ -7,11 +7,10 @@ const cheerio = require('cheerio');
 
 var urlencodedParser = bodyParser.urlencoded({ extended: false });
 
+router.post('/displayLinks', urlencodedParser, function(req, res){
 
-router.get('/getLinks', (req, res) => {
-  
-  database.getLinks(function(result) {
-      res.json(result);
+  database.displayLinks(req.body, function(result) {
+    res.json(result);
   });
 });
 

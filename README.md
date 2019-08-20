@@ -41,10 +41,11 @@ The project is ongoing but most of the important features are completed.
 - [x] Filter on search
 - [x] Prevent duplication
 - [x] Hosting
-- [ ] Sorting
+- [x] Sorting
 - [ ] Create Categories
 - [ ] Pagination
 - [ ] Export Storage
+- [ ] Bootstrap CORS 
 
 
 #### Known Issue

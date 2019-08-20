@@ -4,8 +4,8 @@ import PropTypes from 'prop-types';
 
 
 class Nav extends Component {
-  constructor() {
-    super();
+  constructor(props) {
+    super(props);
     this.state = {
       linksTotal : 0,
       categoryTotal : 0,
@@ -20,7 +20,7 @@ class Nav extends Component {
     .then(res => this.setState({
       
       linksTotal: res[0].count,
-      categoryTotal: 3
+      categoryTotal: 0
     
     
     }))
@@ -51,9 +51,8 @@ class Nav extends Component {
       },
       body: JSON.stringify({title : titleInput, url : urlInput, detail : descInput})
     }).then(
-      
-      this.setState({insertModalShown:false, linksTotal : this.state.linksTotal+1} ),
-      this.props.updateTable() // table component need update after the insert
+      this.handleClose(),
+      this.props.update() // table component need update after the insert
 
     )
     .catch((error) => {
@@ -73,21 +72,21 @@ class Nav extends Component {
   }
 
   onSearchInput = (e) => {
+
     this.props.handleSearch( e.target.value);
+    
   }
 
   render() {
-    return (  
 
-    <div className="sticky-top">
+    return (  
+    <>
 
         <div className="banner">
             <p className="center">Information storage</p>
         </div> 
 
-    
-          
-        <nav className="navbar navbar-expand-lg">
+        <nav className="navbar navbar-expand-lg sticky-top">
 
 
             <a style={{cursor: 'pointer'}} href= 'https://github.com/yatw/Bookmark' target="_blank" rel="noopener noreferrer">
@@ -112,7 +111,7 @@ class Nav extends Component {
           
 
         <InsertModal isShown={this.state.insertModalShown} handleInsertLink={this.handleInsertLink} handleClose={this.handleClose}/>
-      </div>  
+      </>  
 
     );
     }
@@ -120,9 +119,9 @@ class Nav extends Component {
 
   // PropTypes
   Nav.propTypes = {
-    updateTable: PropTypes.func.isRequired,
+    update: PropTypes.func.isRequired,
+    needUpdate: PropTypes.bool.isRequired,
     handleSearch: PropTypes.func.isRequired,
-    needUpdate: PropTypes.bool.isRequired
 
 }
 

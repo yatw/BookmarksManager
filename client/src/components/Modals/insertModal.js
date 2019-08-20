@@ -58,7 +58,6 @@ class InsertModal extends Component {
       }).then(response => response.json())
       .then(data => {
 
-        console.log("back");
         if (data.status === "success"){
             
             this.setState({ titleInput: data.title,

@@ -25,7 +25,7 @@ app.use(express.static(path.join(__dirname, 'client/build')))
 
 // set up routes
 app.use('/', require('./routes/route'));
-app.use('/getLinks', require('./routes/route'));
+app.use('/displayLinks', require('./routes/route'));
 app.use('/getLinksCount', require('./routes/route'));
 app.use('/getTitle', require('./routes/route'));
 app.use('/addLink', require('./routes/route'));

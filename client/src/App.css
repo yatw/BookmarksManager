@@ -24,7 +24,6 @@ html, body{
   background: #ffffcc;
 }
 
-
 .center{
   text-align: center;
 }
@@ -35,7 +34,7 @@ html, body{
 
 .modal {
   top: 5%;
-} 
+}
 
 .fa-clickable {
   cursor:pointer;
@@ -116,3 +115,4 @@ html, body{
     color: #1a75ff;
   }
  }
+

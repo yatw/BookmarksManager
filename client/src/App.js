@@ -8,56 +8,32 @@ import LinksTable from "./components/Tables/LinksTable/linksTable.js";
 class App extends Component{
   constructor() {
     super();
-    this.updateTable = this.updateTable.bind(this);
-    this.updateNavCount = this.updateNavCount.bind(this);
+    this.update = this.update.bind(this);
     this.handleSearch = this.handleSearch.bind(this);
     this.state = {
-      TableUpdate : false,
-      NavCountUpdate: false,
+      needUpdate : false,
       searchTerm: ""
     };
   }
 
-  updateTable(){
-    this.setState({TableUpdate : true})
+  update(){
+    this.setState({needUpdate: true})
   }
 
-  updateNavCount(){
-    this.setState({NavCountUpdate : true})
-  }
 
   handleSearch(searchTerm){
-    this.setState({searchTerm : searchTerm, TableUpdate: false})
+    
+    this.setState({needUpdate: true, searchTerm : searchTerm.trim()})
+    
   }
 
-
   render(){
-
     return (
 
       <div className="container-fluid">
 
-        <Nav updateTable={this.updateTable} needUpdate={this.state.NavCountUpdate} handleSearch={this.handleSearch}/>
-                
-
-        <table className="table table-striped">
-          <thead>
-            <tr>
-              <th scope="col" style={{width: '1%'}}>#</th>
-              <th scope="col" style={{width: '1%'}}>Star</th>
-              <th scope="col" style={{width: '20%'}}>Title</th>
-              <th scope="col" style={{width: '70%'}}>Description</th>
-              <th scope="col" style={{width: '5%'}}>CreatedDate</th>
-              <th scope="col" style={{width: '1%'}}>Read</th>
-              <th scope="col" style={{width: '1%'}}></th>
-            </tr>
-          </thead>
-
-          <tbody>
-            <LinksTable updateNavCount={this.updateNavCount} needUpdate={this.state.TableUpdate} searchTerm={this.state.searchTerm}/>
-          </tbody>
-          
-        </table>
+        <Nav update={this.update} needUpdate={this.state.needUpdate} handleSearch={this.handleSearch}/>
+        <LinksTable update={this.update} needUpdate={this.state.needUpdate} searchTerm={this.state.searchTerm}/>
 
       </div>
       
