@@ -99,6 +99,28 @@ class InsertModal extends Component {
   }
   
 
+  handleInsertLink = (urlInput, titleInput, descInput) => {
+    
+    fetch("/insertLink", {
+      method: 'POST',
+      headers: {
+        Accept: 'application/json',
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({title : titleInput, url : urlInput, detail : descInput})
+    })
+    .then(res => res.json())
+    .then(      
+      this.props.handleClose(),
+      this.props.update() // table component need update after the insert
+
+    )
+    .catch((error) => {
+      console.log(error);
+    });
+  
+  }
+
   render() {
     
     const {urlInput, titleInput, descInput} = this.state;
@@ -138,7 +160,7 @@ class InsertModal extends Component {
 
           {this.displayDuplicateWarning()}
 
-            <Button variant="success" onClick={this.props.handleInsertLink.bind(this, urlInput, titleInput,descInput)} disabled={this.state.isDuplicate}>
+            <Button variant="success" onClick={this.handleInsertLink.bind(this, urlInput, titleInput,descInput)} disabled={this.state.isDuplicate}>
               Save
             </Button>
 
@@ -155,7 +177,7 @@ class InsertModal extends Component {
 InsertModal.propTypes = {
     isShown: PropTypes.bool.isRequired,
     handleClose: PropTypes.func.isRequired,
-    handleInsertLink: PropTypes.func.isRequired
+    update: PropTypes.func.isRequired
 }
 
 

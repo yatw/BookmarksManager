@@ -41,25 +41,6 @@ class Nav extends Component {
     this.updateCounts();
   }
 
-  handleInsertLink = (urlInput, titleInput, descInput) => {
-    
-    fetch("/insertLink", {
-      method: 'POST',
-      headers: {
-        Accept: 'application/json',
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify({title : titleInput, url : urlInput, detail : descInput})
-    }).then(
-      this.handleClose(),
-      this.props.update() // table component need update after the insert
-
-    )
-    .catch((error) => {
-      console.log(error);
-    });
-  
-  }
 
   
 
@@ -110,7 +91,7 @@ class Nav extends Component {
         </nav>
           
 
-        <InsertModal isShown={this.state.insertModalShown} handleInsertLink={this.handleInsertLink} handleClose={this.handleClose}/>
+        <InsertModal isShown={this.state.insertModalShown} handleClose={this.handleClose} update={this.props.update} />
       </>  
 
     );

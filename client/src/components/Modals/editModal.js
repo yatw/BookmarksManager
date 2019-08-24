@@ -8,30 +8,59 @@ class EditModal extends Component {
     super(props);
 
     this.state = {
-        linkId : null,
-        linkUrl : null,
-        linkTitle : null,
-        linkDetail : null
-        
+        linkId : this.props.linkId,
+        linkUrl : this.props.linkUrl,
+        linkTitle : this.props.linkTitle,
+        linkDetail : this.props.linkDetail
     };
-  }
-
-
-  
-  componentWillReceiveProps(newprops) {
-
-    this.setState({
-        linkId : newprops.linkId,
-        linkUrl : newprops.linkUrl,
-        linkTitle : newprops.linkTitle,
-        linkDetail : newprops.linkDetail
-    });
   }
 
   urlonChange = (e) => this.setState({ linkUrl: e.target.value});
   titleonChange = (e) => this.setState({ linkTitle: e.target.value});
   detailonChange = (e) => this.setState({ linkDetail: e.target.value});
   
+  handleUpdateLink = (toupdate_id, newURL, newTitle, newDesc) => {
+
+    fetch("/updateLink", {
+      method: 'POST',
+      headers: {
+        Accept: 'application/json',
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({linkId : toupdate_id, title : newTitle, url : newURL, detail : newDesc})
+    }).then(
+
+      
+      this.props.handleClose(),
+      this.props.update()
+
+    )
+    .catch((error) => {
+      console.log(error);
+    });
+
+  }
+    
+  handleDeleteLink = (todelete_id) => {
+
+    fetch("/deleteLink", {
+      method: 'POST',
+      headers: {
+        Accept: 'application/json',
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({linkId : todelete_id})
+    }).then(
+
+      this.props.handleClose(),
+      this.props.update()
+
+    )
+    .catch((error) => {
+      console.log(error);
+    });
+
+  }
 
   render() {
     
@@ -74,10 +103,10 @@ class EditModal extends Component {
           </Modal.Body>
 
           <Modal.Footer>
-            <Button variant="danger" onClick={this.props.handleDeleteLink.bind(this, linkId)}>
+            <Button variant="danger" onClick={this.handleDeleteLink.bind(this, linkId)}>
               Delete Link
             </Button>
-            <Button variant="success" onClick={this.props.handleUpdateLink.bind(this, linkId, linkUrl,linkTitle,linkDetail)}>
+            <Button variant="success" onClick={this.handleUpdateLink.bind(this, linkId, linkUrl,linkTitle,linkDetail)}>
               Save Changes
             </Button>
           </Modal.Footer>
@@ -91,8 +120,7 @@ class EditModal extends Component {
 EditModal.propTypes = {
     isShown: PropTypes.bool.isRequired,
     handleClose: PropTypes.func.isRequired,
-    handleDeleteLink: PropTypes.func.isRequired,
-    handleUpdateLink: PropTypes.func.isRequired
+    update: PropTypes.func.isRequired
 }
 
 

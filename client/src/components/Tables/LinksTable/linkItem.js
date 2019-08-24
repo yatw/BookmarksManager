@@ -17,76 +17,27 @@ export class LinkItem extends Component {
           completed : this.props.link.completed,
         };
       }
-    
-      handleDeleteLink = (todelete_id) => {
 
-        fetch("/deleteLink", {
-          method: 'POST',
-          headers: {
-            Accept: 'application/json',
-            'Content-Type': 'application/json',
-          },
-          body: JSON.stringify({linkId : todelete_id})
-        }).then(
-    
-            this.props.update()
-    
-        )
-        .catch((error) => {
-          console.log(error);
-        });
-    
+      // when link table reredner, each link got update throught new props
+      componentWillReceiveProps(newprops) {
+          this.setState({
+            Id: newprops.link.linkId,
+            url: newprops.link.url,
+            title: newprops.link.title,
+            detail: newprops.link.detail
+          });
+        
       }
+    
+  
     
     getStarClass = () =>{
         return (this.state.star)?"fas fa-star fa-clickable" : "far fa-star fa-clickable";
     }
 
     getReadClass = () =>{
-        
         return (this.state.completed)?"fas fa-check-square fa-clickable" : "far fa-check-square fa-clickable";
     }
-
-    
-  handleDeleteLink = (todelete_id) => {
-
-    fetch("/deleteLink", {
-      method: 'POST',
-      headers: {
-        Accept: 'application/json',
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify({linkId : todelete_id})
-    }).then(
-        this.handleClose(),
-        this.props.update()
-    )
-    .catch((error) => {
-      console.log(error);
-    });
-
-  }
-
-
-  handleUpdateLink = (toupdate_id, newURL, newTitle, newDesc) => {
-
-    fetch("/updateLink", {
-      method: 'POST',
-      headers: {
-        Accept: 'application/json',
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify({linkId : toupdate_id, title : newTitle, url : newURL, detail : newDesc})
-    }).then(
-
-      this.setState({url : newURL, title : newTitle, detail: newDesc, editModalShown: false })
-
-    )
-    .catch((error) => {
-      console.log(error);
-    });
-
-  }
 
   checkboxToggle = (id, field, curState) => {
     // call node.js route to update db
@@ -121,12 +72,10 @@ export class LinkItem extends Component {
     this.setState({editModalShown: false});
   }
 
-  handleOpen = (id, url, title, detail) => {
-    this.setState({editModalShown:true, Id: id, url: url, title: title, detail : detail });
+  handleOpen = () => {
+    this.setState({editModalShown:true});
   }
 
-
-    
     render() {
         const {Id, title, detail, url, completed, star} = this.state;
 
@@ -151,11 +100,11 @@ export class LinkItem extends Component {
                 <td><i className={this.getReadClass()} style={{fontSize:'30px', color:'#02cf32'}} onClick={this.checkboxToggle.bind(this, Id, 'completed', completed)}></i></td>
 
                 {/*Edit */}
-                <td><i className="fas fa-edit fa-clickable" style={{fontSize:'30px', color:'#ff9933'}} onClick={this.handleOpen.bind(this, Id, url, title, detail )}></i></td>
+                <td><i className="fas fa-edit fa-clickable" style={{fontSize:'30px', color:'#ff9933'}} onClick={this.handleOpen}></i></td>
 
 
                 <EditModal isShown={this.state.editModalShown} linkId={Id} linkUrl={url} linkTitle={title}  linkDetail={detail} 
-                        handleDeleteLink={this.handleDeleteLink} handleUpdateLink={this.handleUpdateLink} handleClose={this.handleClose}/>
+                         update={this.props.update} handleClose={this.handleClose}/>
                 </tr>
         );
     }

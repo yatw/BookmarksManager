@@ -116,3 +116,17 @@ html, body{
   }
  }
 
+.my-custom-scrollbar {
+  overflow: auto;
+  max-height: 80vh;  
+}
+
+.table-wrapper-scroll-y {
+  display: block;
+}
+
+.tableFixHead thead th { 
+  position: sticky; 
+  top: 0; 
+  background: #ffffff;
+}

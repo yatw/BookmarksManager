@@ -57,7 +57,6 @@ class LinksTable extends Component {
 
   }
 
-
   componentDidMount(sortby = null, order = null, searchTerm = this.props.searchTerm) {
 
     if (searchTerm === ""){
@@ -89,11 +88,11 @@ class LinksTable extends Component {
   
   render() {
 
-
     var linkNum = 1;
+
     return (
 
-      <table className="table table-striped">
+      <table className="table table-striped table-wrapper-scroll-y my-custom-scrollbar tableFixHead">
           <thead>
             <tr>
               <th scope="col" style={{width: '1%'}} onClick={this.handleSort.bind(this,"linkId")}>#</th>

@@ -8,9 +8,8 @@ A full-stack web app to store and organize useful information for future referen
 
 #### Ambition
 
-Sometime you stumble upon a really great article, a good tutorial, or an excellent piece of advice. You could store it in your browser's bookmark, but it stops being useful after 20 links or so.
+Great articles, good tutorials, and excellent advices... You could store them in your browser's bookmark, but it stops being useful after 20 links or so.
 
-There are many bookmark managers out there, but I wanted one that is free, reliable and customized, so I will make one myself.
 
 #### How to use
 
@@ -54,6 +53,7 @@ The project is ongoing but most of the important features are completed.
 
 2. Sometimes Bootstrap can't load due to ```Cross-Origin Request Blocked: The Same Origin Policy disallows reading the remote resource at https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css. (Reason: CORS request did not succeed).```
 
+
 ## Instructions
 
 ### Dependencies
@@ -62,6 +62,7 @@ The project is ongoing but most of the important features are completed.
 ```
 npm init -y
 npm install body-parser
+npm install dotenv
 npm install express
 npm install -D nodemon
 npm install ejs --save

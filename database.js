@@ -1,16 +1,16 @@
 const mysql = require('mysql');
 const moment = require('moment');
+require('dotenv').config();
 
 // To connect to mysql
 //https://stackoverflow.com/questions/50093144/mysql-8-0-client-does-not-support-authentication-protocol-requested-by-server
 // run in mysql
 //ALTER USER 'root'@'localhost' IDENTIFIED WITH mysql_native_password BY 'smooth';
-
 const db_config = {
-  host     : 'us-cdbr-iron-east-02.cleardb.net',
-  user     : 'bc0f607f95daca',
-  password : '97ff4423',
-  database : "heroku_af4745ddf02c336",
+  host     : process.env.host,
+  user     : process.env.user,
+  password : process.env.password,
+  database : process.env.database,
   dateStrings: 'date'
 };
 
@@ -44,28 +44,41 @@ function handleDisconnect() {
 handleDisconnect();
 
 
-function insertLink (input) {
+function insertLink (input, callback) {
 
   input['createdDate'] = moment(Date.now()).format('YYYY-MM-DD');
   input['star'] = false;
   input['completed'] = false;
   
   connection.query('INSERT INTO links SET ?', input,  (err, result) => {
-      if (err) throw err;
-  });  
+      if (err) {
+        callback({"status":"error"});
+        throw err;
+      }
+      callback({"status":"success"});
+  });
+  
 }
 
-function updateLink (input) {
+function updateLink (input, callback) {
 
   connection.query('UPDATE links SET url = ?, title = ?, detail = ? WHERE linkId = ?', [input.url, input.title, input.detail, input.linkId],  (err, result) => {
-      if (err) throw err;
-  });  
+      if (err) {
+        callback({"status":"error"});
+        throw err;
+      }
+      callback({"status":"success"});
+  });
 }
 
-function deleteLink (input) {
+function deleteLink (input, callback) {
 
   connection.query('DELETE FROM links WHERE linkId = ?;', [input.linkId],  (err, result) => {
-    if (err) throw err;
+      if (err) {
+        callback({"status":"error"});
+        throw err;
+      }
+      callback({"status":"success"});
   });
 }
 

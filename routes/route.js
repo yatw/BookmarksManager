@@ -61,7 +61,6 @@ router.post('/getTitle', urlencodedParser, function(req, res){
           }
 
       });
-        
     });
     
 });

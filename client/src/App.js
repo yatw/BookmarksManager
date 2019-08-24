@@ -33,8 +33,9 @@ class App extends Component{
       <div className="container-fluid">
 
         <Nav update={this.update} needUpdate={this.state.needUpdate} handleSearch={this.handleSearch}/>
-        <LinksTable update={this.update} needUpdate={this.state.needUpdate} searchTerm={this.state.searchTerm}/>
 
+        <LinksTable update={this.update} needUpdate={this.state.needUpdate} searchTerm={this.state.searchTerm}/>
+        <p className="lead">fine</p>
       </div>
       
     );
