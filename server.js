@@ -31,8 +31,9 @@ app.use('/getTitle', require('./routes/route'));
 app.use('/insertLink', require('./routes/route'));
 app.use('/updateLink', require('./routes/route'));
 app.use('/deleteLink', require('./routes/route'));
+app.use('/displayTags', require('./routes/route'));
+app.use('/getSelectedTags', require('./routes/route'));
 app.use('/checkbox', require('./routes/route'));
-app.use('/search', require('./routes/route'));
 app.use('*', require('./routes/route'));
 
 

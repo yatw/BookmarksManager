@@ -14,15 +14,17 @@ class LinksTable extends Component {
       order: false  // true is ASC, false is DESC
     };
   }
-  displayAll(sortby = null, order = null){
 
+
+  displayAll(tags = [], searchTerm = "", sortby = this.state.sortby, order = this.state.order){
+    
     fetch("/displayLinks", {
       method: 'POST',
       headers: {
         Accept: 'application/json',
         'Content-Type': 'application/json',
       },
-      body: JSON.stringify({sortby : sortby, order : order})
+      body: JSON.stringify({tags: tags, searchTerm : (searchTerm.length > 2)? searchTerm : "", sortby : sortby, order : order})
     })
     .then(response => response.json())
     .then(data => {
@@ -34,43 +36,17 @@ class LinksTable extends Component {
     
   }
 
-  
-  SearchResult(sortby, order, query){
 
-    fetch("/search", {
-      method: 'POST',
-      headers: {
-        Accept: 'application/json',
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify({sortby : sortby, order : order, query : query})
-    
-    })
-    .then(res => res.json())
-    .then(
-
-       links => this.setState({links, sortby: sortby, order: order}) 
-     
-    ).catch((error) => {
-      console.log(error);
-    });
-
+  componentDidMount() {
+    this.displayAll();
   }
 
-  componentDidMount(sortby = null, order = null, searchTerm = this.props.searchTerm) {
 
-    if (searchTerm === ""){
-      this.displayAll(sortby, order);
-    }else if (searchTerm.length > 2){
-      this.SearchResult(sortby, order, searchTerm);
-    }
-
-  }
-
+  // receive new props when a new link is added, or search term is entered
   componentWillReceiveProps(newprops) {
 
     if (newprops.needUpdate){
-      this.componentDidMount(null, null, newprops.searchTerm);
+      this.displayAll( newprops.filterTags, newprops.searchTerm);
     }
   }
 
@@ -83,7 +59,8 @@ class LinksTable extends Component {
       order = !this.state.order;
     }
 
-    this.componentDidMount(sortby, order);
+    this.displayAll(this.props.filterTags, this.props.searchTerm, sortby, order);
+
   }
   
   render() {
@@ -101,13 +78,13 @@ class LinksTable extends Component {
               <th scope="col" style={{width: '70%'}} onClick={this.handleSort.bind(this,"detail")}>Description</th>
               <th scope="col" style={{width: '5%'}} onClick={this.handleSort.bind(this,"createdDate")}>CreatedDate</th>
               <th scope="col" style={{width: '1%'}} onClick={this.handleSort.bind(this,"completed")}>Read</th>
-              <th scope="col" style={{width: '1%'}} onClick={this.handleSort.bind(this,"completed")}></th>
+              <th scope="col" style={{width: '2%'}} onClick={this.handleSort.bind(this,"completed")}></th>
             </tr>
           </thead>
 
           <tbody>
             {this.state.links.map(link => (
-            <LinkItem key={link.linkId} linkNum={linkNum++} link={link} update={this.props.update}/> 
+            <LinkItem key={link.linkId} linkNum={linkNum++} link={link} update={this.props.update} tags={this.props.tags}/> 
             ))}
           </tbody>
        
@@ -121,7 +98,9 @@ class LinksTable extends Component {
 LinksTable.propTypes = {
   update: PropTypes.func.isRequired,
   needUpdate: PropTypes.bool.isRequired,
-  searchTerm: PropTypes.string.isRequired
+  searchTerm: PropTypes.string.isRequired,
+  tags: PropTypes.array.isRequired,
+  filterTags: PropTypes.array.isRequired
 }
 
 

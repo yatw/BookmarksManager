@@ -1,4 +1,4 @@
-# Bookmark
+# Bookmark Manager
 
 A full-stack web app to store and organize useful information for future reference
 
@@ -41,15 +41,14 @@ The project is ongoing but most of the important features are completed.
 - [x] Prevent duplication
 - [x] Hosting
 - [x] Sorting
-- [ ] Create Categories
-- [ ] Pagination
+- [x] Tags
 - [ ] Export Storage
 - [ ] Bootstrap CORS 
 
 
 #### Known Issue
 
-1. ClearDB MySQL will automatically disconnect as explained [here](https://stackoverflow.com/questions/18433124/heroku-and-nodejs-mysql-connection-lost-the-server-closed-the-connection), this sometimes causes delay because server has to establish a new connection
+1. There are delays on search and filter because ClearDB MySQL will automatically disconnect as explained [here](https://stackoverflow.com/questions/18433124/heroku-and-nodejs-mysql-connection-lost-the-server-closed-the-connection), the server has to repeatedly establish new connections
 
 2. Sometimes Bootstrap can't load due to ```Cross-Origin Request Blocked: The Same Origin Policy disallows reading the remote resource at https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css. (Reason: CORS request did not succeed).```
 
@@ -89,7 +88,9 @@ npm start
 
 ### Deploying to Heroku
 
-Make sure to do delete ```build``` folder inside client and then do ```npm run build``` to get ready for production
+Do this everytime!
+
+Delete ```build``` folder inside client and then do ```npm run build``` to get ready for production
 
 In the backend `package.json` file, Heroku will use `npm start` to start the server.
 `heroku-postbuild` is used to start the frontend react server

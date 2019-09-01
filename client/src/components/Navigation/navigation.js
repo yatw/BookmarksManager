@@ -8,8 +8,7 @@ class Nav extends Component {
     super(props);
     this.state = {
       linksTotal : 0,
-      categoryTotal : 0,
-      insertModalShown: false
+      insertModalShown: false,
     };
   }
 
@@ -58,6 +57,11 @@ class Nav extends Component {
     
   }
 
+  getTagBtnClass = (tagName) =>{
+
+    return (this.props.filterTags.includes(tagName))? "btn btn-light active" : "btn btn-light ";
+  }
+
   render() {
 
     return (  
@@ -67,6 +71,7 @@ class Nav extends Component {
             <p className="center">Information storage</p>
         </div> 
 
+
         <nav className="navbar navbar-expand-lg sticky-top">
 
 
@@ -74,11 +79,10 @@ class Nav extends Component {
               <img id="logo" className="navbar-brand" src="logo.jpg" alt=""/>
             </a>
 
-
             <div className="collapse navbar-collapse">
           
                 <span className="navbar-text mr-5 ">
-                  Stored {this.state.linksTotal} entries in {this.state.categoryTotal} categories
+                  Stored {this.state.linksTotal} entries in {this.props.tags.length} categories
                 </span>
     
                 
@@ -89,9 +93,15 @@ class Nav extends Component {
             </div>
 
         </nav>
-          
 
-        <InsertModal isShown={this.state.insertModalShown} handleClose={this.handleClose} update={this.props.update} />
+        <div className="offset-sm-1">
+            {this.props.tags.map(tag => (
+                <button type="button" key={tag.tagId} className={this.getTagBtnClass(tag.name)} onClick={ () => { this.props.handleFilter(tag.name) }}>{tag.name}</button>
+            ))}
+        </div>
+
+
+        <InsertModal isShown={this.state.insertModalShown} handleClose={this.handleClose} update={this.props.update} tags={this.props.tags} />
       </>  
 
     );
@@ -103,7 +113,9 @@ class Nav extends Component {
     update: PropTypes.func.isRequired,
     needUpdate: PropTypes.bool.isRequired,
     handleSearch: PropTypes.func.isRequired,
-
+    tags: PropTypes.array.isRequired,
+    filterTags: PropTypes.array.isRequired,
+    handleFilter: PropTypes.func.isRequired
 }
 
 

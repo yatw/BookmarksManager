@@ -12,9 +12,31 @@ class App extends Component{
     this.handleSearch = this.handleSearch.bind(this);
     this.state = {
       needUpdate : false,
-      searchTerm: ""
+      searchTerm: "",
+      tags : [],
+      filterTags : []
     };
   }
+
+  componentDidMount(){
+
+    fetch("/displayTags", {
+      method: 'POST',
+      headers: {
+        Accept: 'application/json',
+        'Content-Type': 'application/json',
+      }
+    })
+    .then(res => res.json())
+    .then(
+
+       tags => this.setState({tags}) 
+     
+    ).catch((error) => {
+      console.log(error);
+    });
+  }
+
 
   update(){
     this.setState({needUpdate: true})
@@ -27,15 +49,36 @@ class App extends Component{
     
   }
 
+  // in order to access "this.state" use arrow function
+  //https://stackoverflow.com/questions/43284394/react-child-calling-parent-method-cant-access-state
+  handleFilter = (tagName) => {
+
+    var pos = this.state.filterTags.indexOf(tagName);
+
+    var l = null;
+
+    // already selected, now remove it from selected
+    if (pos > -1){
+
+      l = this.state.filterTags;
+      l.splice(pos,1);
+
+    }else{
+      l = this.state.filterTags.concat(tagName);
+    }
+
+    this.setState({ filterTags: l, needUpdate: true });
+
+  }
+
   render(){
     return (
 
       <div className="container-fluid">
 
-        <Nav update={this.update} needUpdate={this.state.needUpdate} handleSearch={this.handleSearch}/>
+        <Nav update={this.update} needUpdate={this.state.needUpdate} handleSearch={this.handleSearch} tags={this.state.tags} filterTags={this.state.filterTags} handleFilter={this.handleFilter}/>
 
-        <LinksTable update={this.update} needUpdate={this.state.needUpdate} searchTerm={this.state.searchTerm}/>
-        <p className="lead">fine</p>
+        <LinksTable update={this.update} needUpdate={this.state.needUpdate} searchTerm={this.state.searchTerm} tags={this.state.tags} filterTags={this.state.filterTags}/>
       </div>
       
     );

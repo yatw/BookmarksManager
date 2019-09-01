@@ -11,9 +11,16 @@ class EditModal extends Component {
         linkId : this.props.linkId,
         linkUrl : this.props.linkUrl,
         linkTitle : this.props.linkTitle,
-        linkDetail : this.props.linkDetail
+        linkDetail : this.props.linkDetail,
+        selectedTags : []
     };
   }
+
+  componentWillReceiveProps(newprops) {
+
+    this.getSelectedTags();
+  }
+
 
   urlonChange = (e) => this.setState({ linkUrl: e.target.value});
   titleonChange = (e) => this.setState({ linkTitle: e.target.value});
@@ -27,7 +34,7 @@ class EditModal extends Component {
         Accept: 'application/json',
         'Content-Type': 'application/json',
       },
-      body: JSON.stringify({linkId : toupdate_id, title : newTitle, url : newURL, detail : newDesc})
+      body: JSON.stringify({linkId : toupdate_id, title : newTitle, url : newURL, detail : newDesc, tags: this.state.selectedTags})
     }).then(
 
       
@@ -62,10 +69,53 @@ class EditModal extends Component {
 
   }
 
-  render() {
-    
-    const {linkId, linkUrl, linkTitle, linkDetail} = this.state;
+  selectTag(tagName){
 
+    // this clicked tag is already selected, now unselect it
+    if( this.state.selectedTags.indexOf(tagName) > -1 ) {
+
+      this.setState({selectedTags: this.state.selectedTags.filter(function(tag) { 
+        return tag !== tagName
+      })});
+
+    }else{
+
+      // else it is not selected, select it
+      this.setState({selectedTags: this.state.selectedTags.concat([tagName])});
+    }
+  }
+
+  getSelectedTags(){
+
+    fetch("/getSelectedTags", {
+      method: 'POST',
+      headers: {
+        Accept: 'application/json',
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({linkId : this.state.linkId})
+    })
+    .then(res => res.json())
+    .then(
+      
+      tags => this.setState({selectedTags: tags}) 
+    
+    ).catch((error) => {
+      console.log(error);
+    });
+
+}
+
+  getTagClass = (tagName) =>{
+    
+    var index = this.state.selectedTags.indexOf(tagName);
+
+    return (index > -1)? "list-group-item list-group-item-info" : "list-group-item ";
+  }
+
+  render() {
+
+    const {linkId, linkUrl, linkTitle, linkDetail} = this.state;
     return (
 
         <>
@@ -98,6 +148,16 @@ class EditModal extends Component {
                     <input type="text" className="form-control" name="detail" id="descEdit" defaultValue={linkDetail} onChange={this.detailonChange}/>
                 </div>
 
+                <div className="form-group">
+                    <label>Tags</label>
+
+                    <ul className="list-group">
+                      {this.props.tags.map(tag => (
+                        <li key={tag.tagId} className={this.getTagClass(tag.name)} onClick={() => { this.selectTag(tag.name) }}>{tag.name}</li>
+                      ))}
+                    </ul>
+                </div>
+
             </form>
 
           </Modal.Body>
@@ -120,7 +180,8 @@ class EditModal extends Component {
 EditModal.propTypes = {
     isShown: PropTypes.bool.isRequired,
     handleClose: PropTypes.func.isRequired,
-    update: PropTypes.func.isRequired
+    update: PropTypes.func.isRequired,
+    tags: PropTypes.array.isRequired
 }
 
 

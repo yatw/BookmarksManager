@@ -32,9 +32,6 @@ html, body{
   width: 500px;
 }
 
-.modal {
-  top: 5%;
-}
 
 .fa-clickable {
   cursor:pointer;

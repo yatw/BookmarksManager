@@ -13,20 +13,18 @@ class InsertModal extends Component {
         titleInput : null,
         descInput : null,
         isDuplicate : false,
-        borderColor: null
+        borderColor: null,
+        selectedTags : []
         
     };
   }
-
-
   
   componentWillReceiveProps(newprops) {
     
     this.setState({
-        isShown: newprops.isShown,
         isDuplicate : false,
-        borderColor: null
-
+        borderColor: null,
+        selectedTags: []  // clear selected tags upon open
     });
   }
 
@@ -100,14 +98,14 @@ class InsertModal extends Component {
   
 
   handleInsertLink = (urlInput, titleInput, descInput) => {
-    
+
     fetch("/insertLink", {
       method: 'POST',
       headers: {
         Accept: 'application/json',
         'Content-Type': 'application/json',
       },
-      body: JSON.stringify({title : titleInput, url : urlInput, detail : descInput})
+      body: JSON.stringify({title : titleInput, url : urlInput, detail : descInput, tags: this.state.selectedTags })
     })
     .then(res => res.json())
     .then(      
@@ -121,10 +119,31 @@ class InsertModal extends Component {
   
   }
 
+  selectTag(tagName){
+
+    // this clicked tag is already selected, now unselect it
+    if( this.state.selectedTags.indexOf(tagName) > -1 ) {
+
+      this.setState({selectedTags: this.state.selectedTags.filter(function(tag) { 
+        return tag !== tagName
+      })});
+
+    }else{
+
+      // else it is not selected, select it
+      this.setState({selectedTags: this.state.selectedTags.concat([tagName])});
+    }
+  }
+
+  getTagClass = (tagName) =>{
+
+    var index = this.state.selectedTags.indexOf(tagName);
+    return (index > -1)? "list-group-item list-group-item-info" : "list-group-item";
+  }
+
   render() {
     
     const {urlInput, titleInput, descInput} = this.state;
-
     return (
 
         <> 
@@ -151,6 +170,18 @@ class InsertModal extends Component {
                     <label>Description</label>
                     <input type="text" className="form-control"  style={this.placeBorder()} id="descInput" placeholder="Enter Description" onChange={this.detailonChange}/>
                 </div>
+                
+
+                <div className="form-group">
+                  <label>Tags</label>
+
+                  <ul className="list-group">
+                  {this.props.tags.map(tag => (
+                    <li key={tag.tagId} className={this.getTagClass(tag.name)} onClick={() => { this.selectTag(tag.name) }}>{tag.name}</li>
+                  ))}
+                  </ul>
+                  
+                </div>
 
             </form>
 
@@ -164,8 +195,6 @@ class InsertModal extends Component {
               Save
             </Button>
 
-            
-
           </Modal.Footer>
         </Modal>
       </>
@@ -177,7 +206,9 @@ class InsertModal extends Component {
 InsertModal.propTypes = {
     isShown: PropTypes.bool.isRequired,
     handleClose: PropTypes.func.isRequired,
-    update: PropTypes.func.isRequired
+    update: PropTypes.func.isRequired,
+    tags: PropTypes.array.isRequired
+
 }
 
 

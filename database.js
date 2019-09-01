@@ -45,34 +45,106 @@ handleDisconnect();
 
 
 function insertLink (input, callback) {
-
-  input['createdDate'] = moment(Date.now()).format('YYYY-MM-DD');
-  input['star'] = false;
-  input['completed'] = false;
   
-  connection.query('INSERT INTO links SET ?', input,  (err, result) => {
+  connection.query('INSERT INTO links SET title = ?, url = ?, detail = ?, createdDate = ?, star = ?, completed = ?', [input.title, input.url, input.detail, moment(Date.now()).format('YYYY-MM-DD'), false, false],  (err, result) => {
       if (err) {
+        console.log(err);
         callback({"status":"error"});
         throw err;
       }
-      callback({"status":"success"});
   });
-  
+
+  // for each tag, insert the relation into the linkTag table
+  input.tags.forEach(function (tag, index) {
+
+      connection.query('INSERT INTO linkTag (link, tag)  VALUES ((SELECT linkId FROM links WHERE url = ?), (SELECT tagId FROM tags WHERE name = ?));', [input.url, tag],  (err) => {
+        if (err) {
+          console.log(err);
+          callback({"status":"error"});
+          throw err;
+        }
+      });
+
+  });
+
+  callback({"status":"success"});
 }
 
 function updateLink (input, callback) {
 
+  
   connection.query('UPDATE links SET url = ?, title = ?, detail = ? WHERE linkId = ?', [input.url, input.title, input.detail, input.linkId],  (err, result) => {
       if (err) {
         callback({"status":"error"});
         throw err;
       }
-      callback({"status":"success"});
+  });
+  
+
+  var c = "SELECT name FROM  \
+          linkTag INNER JOIN tags on linkTag.tag = tags.tagId  \
+          WHERE link = ?";
+  
+
+  // get this link's current selected tags
+  connection.query(c, [input.linkId],  (err, result) => {
+    if (err) {
+      callback({"status":"error"});
+      throw err;
+    }
+    
+    var curSelected = [];
+    result.forEach(function (tag, index) {
+
+      if (!input.tags.includes(tag.name)){  // if this tag is now not needed, remove
+        curSelected.push(tag.name);
+
+        // delete each tag in the relation table
+        
+        
+        connection.query('DELETE FROM linkTag WHERE link = ? AND tag = (SELECT tagId FROM tags WHERE name = ?);', [input.linkId, tag.name],  (err, result) => {
+          if (err) {
+            console.log(err);
+            callback({"status":"error"});
+            throw err;
+          }
+        });
+      
+      }
+    })
+
+    input.tags.forEach(function (tag, index) {
+
+      if (!curSelected.includes(tag)){  // if this new tag is not already a tag, insert it
+        
+        connection.query('INSERT INTO linkTag (link, tag) VALUES (?, (SELECT tagId FROM tags WHERE name = ?));', [input.linkId, tag],  (err, result) => {
+          if (err) {
+            console.log(err);
+            callback({"status":"error"});
+            throw err;
+          }
+        });
+        
+      }
+    })
+
+
+    callback({"status":"success"});
   });
 }
 
 function deleteLink (input, callback) {
 
+
+  // delete the relation in the linkTag table
+  connection.query('DELETE FROM linkTag WHERE link = ?;', [input.linkId],  (err, result) => {
+    if (err) {
+      callback({"status":"error"});
+      throw err;
+    }
+  });
+
+  // delete the link itself
   connection.query('DELETE FROM links WHERE linkId = ?;', [input.linkId],  (err, result) => {
       if (err) {
         callback({"status":"error"});
@@ -82,10 +154,40 @@ function deleteLink (input, callback) {
   });
 }
 
+
 function displayLinks(input, callback){
 
-  var q = "SELECT * FROM links";
+  // first handle tags
+  // then handle search
+  // last handle sort
+
+  var sub = [];
+
+  var q = "SELECT * FROM links ";
   
+  // handle tags
+    input.tags.forEach(function (tag, index) {
+
+
+      q += `
+        INNER JOIN linkTag lt` + index + ` ON links.linkId = lt` + index + `.link 
+        INNER JOIN tags t` + index + ` ON t` + index + `.tagId = lt` + index + `.tag
+        AND t` + index + `.name = ?
+      `
+      sub.push(tag);
+    });
+    
+ 
+  // handle search
+  if (input.searchTerm != ""){
+
+    q +=  " WHERE title LIKE ? OR detail LIKE ?";
+    
+    sub.push('%'+input.searchTerm+'%');
+    sub.push('%'+input.searchTerm+'%');
+  }
+  
+  // handle sort
   if (input.sortby != null){
     
     if (input.sortby === "star" || input.sortby === "completed"){
@@ -97,42 +199,14 @@ function displayLinks(input, callback){
     q += " ORDER BY " + input.sortby + " " + order;
   }
 
-  q += ";";
 
-
-
-  var query = connection.query(q, (err, result) => {
+  var query = connection.query(q, sub, (err, result) => {
       if (err) throw err;
       callback(result);
   });
   
   //console.log(query.sql);
-}
-
-
-function search(input, callback){
   
-  var q = "SELECT * FROM links WHERE ( title LIKE ? OR detail LIKE ?)";
-  
-  if (input.sortby != null){
-    
-    if (input.sortby === "star" || input.sortby === "completed"){
-      input.order = !input.order;
-    }
-
-    var order = input.order? "ASC" : "DESC";
-
-    q += " ORDER BY " + input.sortby + " " + order;
-  }
-
-
-  q += ";";
-
-  var query = connection.query(q, ['%'+ input.query + '%', '%' + input.query + '%'], (err, result) => {
-    if (err) throw err;
-    callback(result);
-  });
-
 }
 
 function getLinksCount(callback){
@@ -162,6 +236,38 @@ function checkbox(input){
   });
 }
 
+
+function displayTags(input, callback){
+
+  var query = connection.query('SELECT * FROM tags ORDER BY name;', (err, result) => {
+      if (err) throw err;
+      callback(result);
+  });
+
+}
+
+function getSelectedTags(input, callback){
+
+  
+var q =   " SELECT name from  \
+            tags INNER JOIN linkTag on linkTag.tag = tags.tagId  \
+            WHERE link = ?;"
+
+  var query = connection.query(q, [input.linkId], (err, result) => {
+    if (err) throw err;
+
+    var selectedTags = [];
+
+    result.forEach(function (item, index) {
+      selectedTags.push(item.name);
+    });
+
+    callback(selectedTags);
+  });
+
+}
+
+
 module.exports.checkExist = checkExist;
 module.exports.deleteLink = deleteLink;
 module.exports.insertLink = insertLink;
@@ -169,5 +275,5 @@ module.exports.displayLinks = displayLinks;
 module.exports.getLinksCount = getLinksCount;
 module.exports.checkbox = checkbox;
 module.exports.updateLink = updateLink;
-module.exports.search = search;
-
+module.exports.displayTags = displayTags;
+module.exports.getSelectedTags = getSelectedTags;

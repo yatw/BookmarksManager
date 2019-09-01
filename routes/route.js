@@ -96,9 +96,17 @@ router.post('/checkbox', urlencodedParser, function(req, res){
   });
 });
 
-router.post('/search', urlencodedParser, function(req, res){
+router.post('/displayTags', urlencodedParser, function(req, res){
 
-  database.search(req.body, function(result) {
+  database.displayTags(req.body, function(result) {
+    res.json(result);
+  });
+});
+
+
+router.post('/getSelectedTags', urlencodedParser, function(req, res){
+
+  database.getSelectedTags(req.body, function(result) {
     res.json(result);
   });
 });

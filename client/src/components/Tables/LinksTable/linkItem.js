@@ -14,12 +14,14 @@ export class LinkItem extends Component {
           title : this.props.link.title,
           detail : this.props.link.detail,
           star : this.props.link.star,
-          completed : this.props.link.completed,
+          completed : this.props.link.completed
         };
       }
 
       // when link table reredner, each link got update throught new props
       componentWillReceiveProps(newprops) {
+
+        
           this.setState({
             Id: newprops.link.linkId,
             url: newprops.link.url,
@@ -28,7 +30,7 @@ export class LinkItem extends Component {
           });
         
       }
-    
+  
   
     
     getStarClass = () =>{
@@ -104,7 +106,7 @@ export class LinkItem extends Component {
 
 
                 <EditModal isShown={this.state.editModalShown} linkId={Id} linkUrl={url} linkTitle={title}  linkDetail={detail} 
-                         update={this.props.update} handleClose={this.handleClose}/>
+                         update={this.props.update} handleClose={this.handleClose} tags={this.props.tags} />
                 </tr>
         );
     }
@@ -113,7 +115,8 @@ export class LinkItem extends Component {
 // PropTypes
 LinkItem.propTypes = {
     link: PropTypes.object.isRequired,
-    update: PropTypes.func.isRequired
+    update: PropTypes.func.isRequired,
+    tags: PropTypes.array.isRequired
 }
 
   
