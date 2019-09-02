@@ -4,8 +4,57 @@ const router = express.Router();
 const database = require('../database');
 const request = require('request');
 const cheerio = require('cheerio');
+require('dotenv').config();
+
 
 var urlencodedParser = bodyParser.urlencoded({ extended: false });
+
+// disable insert, update or delete for visitors
+const ignoreNotLogin = (req, res, next) => {
+
+  if (req.session.userName === process.env.Name){
+    console.log("Executed");
+    next();
+  }else{
+    console.log("Ignored guest request");
+  }
+}
+
+router.get('/', urlencodedParser, function(req, res){
+  console.log(req.session);
+  if (req.session.views) {
+    req.session.views++
+    res.setHeader('Content-Type', 'text/html')
+    res.write('<p>views: ' + req.session.views + '</p>')
+    res.write('<p>expires in: ' + (req.session.cookie.maxAge / 1000) + 's</p>')
+    res.end()
+  } else {
+    req.session.views = 1
+    res.end('welcome to the session demo. refresh!')
+  }
+});
+
+router.get('/isLogin', urlencodedParser, function(req, res){
+
+  var status = (req.session.userName) ? true : false;
+  res.json({status: status});
+
+});
+
+router.post('/login', urlencodedParser, function(req, res){
+
+  var nameInput = req.body.userName;
+
+  if (nameInput === "guest" || nameInput === process.env.Name){
+    req.session.userName = nameInput;
+
+    res.json({status: true});
+  }else{
+    res.json({status: false});
+  }
+
+});
+
 
 router.post('/displayLinks', urlencodedParser, function(req, res){
 
@@ -65,7 +114,7 @@ router.post('/getTitle', urlencodedParser, function(req, res){
     
 });
 
-router.post('/insertLink', urlencodedParser, function(req, res){
+router.post('/insertLink', ignoreNotLogin, urlencodedParser, function(req, res){
 
   database.insertLink(req.body, function(result) {
     res.json(result);
@@ -73,7 +122,7 @@ router.post('/insertLink', urlencodedParser, function(req, res){
 
 });
 
-router.post('/updateLink', urlencodedParser, function(req, res){
+router.post('/updateLink', ignoreNotLogin, urlencodedParser, function(req, res){
 
   database.updateLink(req.body, function(result) {
     res.json(result);
@@ -81,7 +130,7 @@ router.post('/updateLink', urlencodedParser, function(req, res){
 
 });
 
-router.post('/deleteLink', urlencodedParser, function(req, res){
+router.post('/deleteLink', ignoreNotLogin, urlencodedParser, function(req, res){
 
   database.deleteLink(req.body, function(result) {
     res.json(result);
@@ -110,6 +159,7 @@ router.post('/getSelectedTags', urlencodedParser, function(req, res){
     res.json(result);
   });
 });
+
 
 
 router.get('*', (req, res) => {

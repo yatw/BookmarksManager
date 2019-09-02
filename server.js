@@ -1,8 +1,27 @@
 const bodyParser = require('body-parser');
 const express = require('express');
 const path = require('path');
+const session = require('express-session');
+require('dotenv').config();
+
 
 const app = express();
+
+const TEN_MIN = 1000 * 60 * 10;
+
+var sess = {
+  secret: process.env.sessionSecret,
+  resave: true,
+  saveUninitialized: true,
+  cookie: {
+    maxAge : TEN_MIN
+  }
+}
+
+app.set('trust proxy', 1) // trust first proxy
+
+app.use(session(sess))
+
 
 app.use(function(req, res, next) {
 
@@ -25,6 +44,8 @@ app.use(express.static(path.join(__dirname, 'client/build')))
 
 // set up routes
 app.use('/', require('./routes/route'));
+app.use('/isLogin', require('./routes/route'));
+app.use('/login', require('./routes/route'));
 app.use('/displayLinks', require('./routes/route'));
 app.use('/getLinksCount', require('./routes/route'));
 app.use('/getTitle', require('./routes/route'));

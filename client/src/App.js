@@ -2,6 +2,7 @@ import React, {Component} from 'react';
 import './App.css';
 import Nav from "./components/Navigation/navigation.js";
 import LinksTable from "./components/Tables/LinksTable/linksTable.js";
+import LoginModal from './components/Modals/loginModal';
 
 
 
@@ -11,6 +12,7 @@ class App extends Component{
     this.update = this.update.bind(this);
     this.handleSearch = this.handleSearch.bind(this);
     this.state = {
+
       needUpdate : false,
       searchTerm: "",
       tags : [],
@@ -75,6 +77,8 @@ class App extends Component{
     return (
 
       <div className="container-fluid">
+
+        <LoginModal/>
 
         <Nav update={this.update} needUpdate={this.state.needUpdate} handleSearch={this.handleSearch} tags={this.state.tags} filterTags={this.state.filterTags} handleFilter={this.handleFilter}/>
 
