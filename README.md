@@ -8,8 +8,9 @@ A full-stack web app to store and organize useful information for future referen
 
 #### Ambition
 
-My browser's Bookmarks Toolbar stops being useful after 20 links or so. I also need a way to find out what got deleted from my youtube playlist.
-Making my own bookmarks manger allow me easily save and retrieve these informations without relying on other services.
+My browser's Bookmarks Toolbar stops being useful after 20 links or so.  
+I also need a way to find out what got deleted from my youtube playlist.  
+Making my own bookmarks manger allow me easily save and retrieve these informations without relying on other services.  
 This project can solve an actual problem that I have and familar myself with technologies such as Node.Js and React.
 
 

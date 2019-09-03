@@ -57,12 +57,19 @@ class LoginModal extends Component {
 
 
     submitHandler(e) {
+        console.log("here");
         e.preventDefault();
         this.handleLogin((this.refs.nameInput).value);
     }
 
     doNothing(){
 
+    }
+
+    hidewarning(){
+      if (this.state.incorrectUser){
+        this.setState({incorrectUser : false});
+      }
     }
 
     render() {
@@ -79,7 +86,7 @@ class LoginModal extends Component {
                 <form onSubmit={this.submitHandler.bind(this)}>
     
                     <div className="form-group">
-                        <input type="text" className="form-control" ref="nameInput" placeholder="Enter Username"/>
+                        <input type="text" className="form-control" ref="nameInput" onChange={this.hidewarning.bind(this)} placeholder="Enter Username"/>
                     </div>
                     {this.displayIncorrectWarning()}
                 </form>
