@@ -17,7 +17,7 @@ class LinksTable extends Component {
 
 
   displayAll(tags = [], searchTerm = "", sortby = this.state.sortby, order = this.state.order){
-    
+
     fetch("/displayLinks", {
       method: 'POST',
       headers: {
@@ -44,10 +44,9 @@ class LinksTable extends Component {
 
   // receive new props when a new link is added, or search term is entered
   componentWillReceiveProps(newprops) {
-
-    if (newprops.needUpdate){
+    //if (newprops.needUpdate){
       this.displayAll( newprops.filterTags, newprops.searchTerm);
-    }
+    //}
   }
 
 

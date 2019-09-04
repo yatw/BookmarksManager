@@ -41,7 +41,8 @@ class App extends Component{
 
 
   update(){
-    this.setState({needUpdate: true})
+    this.forceUpdate();
+    //this.setState({needUpdate: true})
   }
 
 

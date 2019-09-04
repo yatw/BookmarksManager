@@ -44,6 +44,7 @@ The project is complete and functional, with minor occasional updates.
 - [x] Sorting
 - [x] Tags
 - [x] User Session
+- [ ] Feedback
 - [ ] Export Storage
 - [ ] Bootstrap CORS 
 

@@ -57,7 +57,7 @@ class LoginModal extends Component {
 
 
     submitHandler(e) {
-        console.log("here");
+
         e.preventDefault();
         this.handleLogin((this.refs.nameInput).value);
     }

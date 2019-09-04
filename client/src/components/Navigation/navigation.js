@@ -59,7 +59,7 @@ class Nav extends Component {
 
   getTagBtnClass = (tagName) =>{
 
-    return (this.props.filterTags.includes(tagName))? "btn btn-light active" : "btn btn-light ";
+    return (this.props.filterTags.includes(tagName))? "btn btn-primary" : "btn btn-light ";
   }
 
   render() {

@@ -93,15 +93,20 @@ function updateLink (input, callback) {
       throw err;
     }
     
-    var curSelected = [];
+    var curSelected = new Set(); 
+
+    // iterate through result, which is the current tags
     result.forEach(function (tag, index) {
 
-      if (!input.tags.includes(tag.name)){  // if this tag is now not needed, remove
-        curSelected.push(tag.name);
+      // if it is already in input, it is already selected, no need to do anything
+      if (input.tags.includes(tag.name)){
 
-        // delete each tag in the relation table
-        
-        
+        curSelected.add(tag.name);
+
+      }else{
+
+        // otherwise, if this tag is now not needed, remove
+
         connection.query('DELETE FROM linkTag WHERE link = ? AND tag = (SELECT tagId FROM tags WHERE name = ?);', [input.linkId, tag.name],  (err, result) => {
           if (err) {
             console.log(err);
@@ -109,14 +114,15 @@ function updateLink (input, callback) {
             throw err;
           }
         });
-      
+
       }
     })
 
+    // iterate through input, if it is not already in curSelected, insert it
     input.tags.forEach(function (tag, index) {
 
-      if (!curSelected.includes(tag)){  // if this new tag is not already a tag, insert it
-        
+      if (!curSelected.has(tag)){  // if this new tag is not already a tag, insert it
+
         connection.query('INSERT INTO linkTag (link, tag) VALUES (?, (SELECT tagId FROM tags WHERE name = ?));', [input.linkId, tag],  (err, result) => {
           if (err) {
             console.log(err);
@@ -124,7 +130,7 @@ function updateLink (input, callback) {
             throw err;
           }
         });
-        
+        curSelected.add(tag.name);
       }
     })
 

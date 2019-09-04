@@ -7,11 +7,11 @@ require('dotenv').config();
 
 const app = express();
 
-const TEN_MIN = 1000 * 60 * 10;
+const TEN_MIN = 1000 * 60 * 20;
 
 var sess = {
   secret: process.env.sessionSecret,
-  resave: true,
+  resave: false,
   saveUninitialized: true,
   cookie: {
     maxAge : TEN_MIN
