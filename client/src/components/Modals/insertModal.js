@@ -132,7 +132,7 @@ class InsertModal extends Component {
       (response) =>{
 
         if (response.status === "ignored"){
-          this.showNotification("Insert Ignored", "Not executing guest request to protect data", "info", 2500);
+          this.showNotification("Insert Ignored", "Not executing guest request to protect the data", "info", 2500);
         }else{
         
           this.props.handleClose();

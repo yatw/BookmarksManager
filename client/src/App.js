@@ -45,8 +45,7 @@ class App extends Component{
 
 
   update(){
-    this.forceUpdate();
-    //this.setState({needUpdate: true})
+    this.setState({needUpdate: true});
   }
 
 
@@ -86,9 +85,9 @@ class App extends Component{
         <ReactNotification />
         <LoginModal/>
 
-        <Nav update={this.update} needUpdate={this.state.needUpdate} handleSearch={this.handleSearch} tags={this.state.tags} filterTags={this.state.filterTags} handleFilter={this.handleFilter}/>
+        <Nav needUpdate={this.state.needUpdate} update={this.update} handleSearch={this.handleSearch} tags={this.state.tags} filterTags={this.state.filterTags} handleFilter={this.handleFilter}/>
 
-        <LinksTable update={this.update} needUpdate={this.state.needUpdate} searchTerm={this.state.searchTerm} tags={this.state.tags} filterTags={this.state.filterTags}/>
+        <LinksTable needUpdate={this.state.needUpdate} update={this.update} searchTerm={this.state.searchTerm} tags={this.state.tags} filterTags={this.state.filterTags}/>
       </div>
       
     );

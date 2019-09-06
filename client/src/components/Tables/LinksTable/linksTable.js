@@ -44,11 +44,10 @@ class LinksTable extends Component {
 
   // receive new props when a new link is added, or search term is entered
   componentWillReceiveProps(newprops) {
-    //if (newprops.needUpdate){
+    if (newprops.needUpdate){
       this.displayAll( newprops.filterTags, newprops.searchTerm);
-    //}
+    }
   }
-
 
   handleSort(sortby){
 

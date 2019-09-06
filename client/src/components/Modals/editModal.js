@@ -19,7 +19,6 @@ class EditModal extends Component {
   }
 
   componentWillReceiveProps(newprops) {
-
     this.getSelectedTags();
   }
   
@@ -127,7 +126,6 @@ class EditModal extends Component {
   }
 
   getSelectedTags(){
-
     fetch("/getSelectedTags", {
       method: 'POST',
       headers: {

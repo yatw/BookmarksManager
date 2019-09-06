@@ -92,7 +92,7 @@ class LoginModal extends Component {
 
     requestLogin(){
 
-     this.showNotification("Please login to continue", "You can login as guest", "info");
+     this.showNotification("Please login to continue", "You can login as a guest", "info");
     }
 
     hidewarning(){
