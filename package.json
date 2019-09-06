@@ -22,6 +22,7 @@
     "moment": "^2.24.0",
     "mysql": "^2.17.1",
     "react-bootstrap": "^1.0.0-beta.10",
+    "react-notifications-component": "^2.0.7",
     "request": "^2.88.0"
   },
   "devDependencies": {

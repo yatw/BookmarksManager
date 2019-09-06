@@ -1,5 +1,9 @@
 import React, {Component} from 'react';
 import './App.css';
+
+import ReactNotification from 'react-notifications-component';
+import 'react-notifications-component/dist/theme.css';
+
 import Nav from "./components/Navigation/navigation.js";
 import LinksTable from "./components/Tables/LinksTable/linksTable.js";
 import LoginModal from './components/Modals/loginModal';
@@ -77,8 +81,9 @@ class App extends Component{
   render(){
     return (
 
+  
       <div className="container-fluid">
-
+        <ReactNotification />
         <LoginModal/>
 
         <Nav update={this.update} needUpdate={this.state.needUpdate} handleSearch={this.handleSearch} tags={this.state.tags} filterTags={this.state.filterTags} handleFilter={this.handleFilter}/>

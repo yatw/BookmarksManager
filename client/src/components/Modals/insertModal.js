@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import { Button, Modal } from 'react-bootstrap';
 import PropTypes from 'prop-types';
 
+import { store } from 'react-notifications-component';
 
 
 class InsertModal extends Component {
@@ -28,6 +29,24 @@ class InsertModal extends Component {
     });
   }
 
+  showNotification(title, message, type, time=1000){
+
+    store.addNotification({
+      title: title,
+      message: message,
+      type: type,
+      insert: "top",
+      container: "top-right",
+      width: 300,
+      animationIn: ["animated", "fadeIn"],
+      animationOut: ["animated", "fadeOut"],
+      dismiss: {
+        duration: time,
+        onScreen: false,
+        pauseOnHover: true
+      }
+    });
+  }
 
   placeBorder(){
 
@@ -107,10 +126,20 @@ class InsertModal extends Component {
       },
       body: JSON.stringify({title : titleInput, url : urlInput, detail : descInput, tags: this.state.selectedTags })
     })
-    .then(res => res.json())
-    .then(      
-      this.props.handleClose(),
-      this.props.update() // table component need update after the insert
+    .then(response => response.json())
+    .then(
+
+      (response) =>{
+
+        if (response.status === "ignored"){
+          this.showNotification("Insert Ignored", "Not executing guest request to protect data", "info", 2500);
+        }else{
+        
+          this.props.handleClose();
+          this.showNotification("Insert Success", `Inserted ${titleInput}`, "success");
+          this.props.update(); // table component need update after the insert
+        }
+      }
 
     )
     .catch((error) => {
@@ -208,7 +237,6 @@ InsertModal.propTypes = {
     handleClose: PropTypes.func.isRequired,
     update: PropTypes.func.isRequired,
     tags: PropTypes.array.isRequired
-
 }
 
 

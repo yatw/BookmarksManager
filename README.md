@@ -44,7 +44,7 @@ The project is complete and functional, with minor occasional updates.
 - [x] Sorting
 - [x] Tags
 - [x] User Session
-- [ ] Feedback
+- [ ] Notification
 - [ ] Export Storage
 - [ ] Bootstrap CORS 
 
@@ -76,6 +76,7 @@ npm install request
 npm install cheerio
 npm install react-bootstrap
 npm install express-session
+npm install react-notifications-component
 ```
 
 **To start running**

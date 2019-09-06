@@ -1,6 +1,9 @@
 import React, { Component } from 'react';
 import { Button, Modal } from 'react-bootstrap';
 
+import { store } from 'react-notifications-component';
+
+
 class LoginModal extends Component {
 
     constructor(props) {
@@ -31,6 +34,25 @@ class LoginModal extends Component {
 
     }
 
+    showNotification(title, message, type){
+
+      store.addNotification({
+        title: title,
+        message: message,
+        type: type,
+        insert: "top",
+        container: "top-right",
+        width: 300,
+        animationIn: ["animated", "fadeIn"],
+        animationOut: ["animated", "fadeOut"],
+        dismiss: {
+          duration: 1000,
+          onScreen: false,
+          pauseOnHover: true
+        }
+      });
+    }
+
     handleLogin(name){
 
         fetch("/login", {
@@ -43,7 +65,13 @@ class LoginModal extends Component {
           }).then(response => response.json())
           .then(response =>
             
-             (response.status)? this.setState({isShown: false}) : this.setState({incorrectUser: true})
+             (response.status)? 
+             
+             (this.setState({isShown: false}),
+              this.showNotification("Login Success", `Welcome ${name}` , "success")
+             )
+
+             : this.setState({incorrectUser: true})
           )
           .catch((error) => {
             console.log(error);
@@ -62,8 +90,9 @@ class LoginModal extends Component {
         this.handleLogin((this.refs.nameInput).value);
     }
 
-    doNothing(){
+    requestLogin(){
 
+     this.showNotification("Please login to continue", "You can login as guest", "info");
     }
 
     hidewarning(){
@@ -75,8 +104,9 @@ class LoginModal extends Component {
     render() {
         
         return (
-            <> 
-            <Modal id="loginModal" show={this.state.isShown} onHide={this.doNothing}>
+            <>
+            
+            <Modal id="loginModal" show={this.state.isShown} onHide={this.requestLogin.bind(this)}>
               <Modal.Header>
                 <Modal.Title>Login</Modal.Title>
               </Modal.Header>

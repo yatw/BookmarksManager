@@ -10,13 +10,12 @@ require('dotenv').config();
 var urlencodedParser = bodyParser.urlencoded({ extended: false });
 
 // disable insert, update or delete for visitors
-const ignoreNotLogin = (req, res, next) => {
+const ignoreGuestRequest = (req, res, next) => {
 
   if (req.session.userName === process.env.Name){
-    console.log("Executed");
     next();
   }else{
-    console.log("Ignored guest request");
+    res.json({status: "ignored"});
   }
 }
 
@@ -114,7 +113,7 @@ router.post('/getTitle', urlencodedParser, function(req, res){
     
 });
 
-router.post('/insertLink', ignoreNotLogin, urlencodedParser, function(req, res){
+router.post('/insertLink', ignoreGuestRequest, urlencodedParser, function(req, res){
 
   database.insertLink(req.body, function(result) {
     res.json(result);
@@ -122,7 +121,7 @@ router.post('/insertLink', ignoreNotLogin, urlencodedParser, function(req, res){
 
 });
 
-router.post('/updateLink', ignoreNotLogin, urlencodedParser, function(req, res){
+router.post('/updateLink', ignoreGuestRequest, urlencodedParser, function(req, res){
 
   database.updateLink(req.body, function(result) {
     res.json(result);
@@ -130,7 +129,7 @@ router.post('/updateLink', ignoreNotLogin, urlencodedParser, function(req, res){
 
 });
 
-router.post('/deleteLink', ignoreNotLogin, urlencodedParser, function(req, res){
+router.post('/deleteLink', ignoreGuestRequest, urlencodedParser, function(req, res){
 
   database.deleteLink(req.body, function(result) {
     res.json(result);

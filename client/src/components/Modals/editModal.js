@@ -2,6 +2,8 @@ import React, { Component } from 'react';
 import { Button, Modal } from 'react-bootstrap';
 import PropTypes from 'prop-types';
 
+import { store } from 'react-notifications-component';
+
 
 class EditModal extends Component {
   constructor(props) {
@@ -20,7 +22,25 @@ class EditModal extends Component {
 
     this.getSelectedTags();
   }
+  
+  showNotification(title, message, type, time=1000){
 
+    store.addNotification({
+      title: title,
+      message: message,
+      type: type,
+      insert: "top",
+      container: "top-right",
+      width: 300,
+      animationIn: ["animated", "fadeIn"],
+      animationOut: ["animated", "fadeOut"],
+      dismiss: {
+        duration: time,
+        onScreen: false,
+        pauseOnHover: true
+      }
+    });
+  }
 
   urlonChange = (e) => this.setState({ linkUrl: e.target.value});
   titleonChange = (e) => this.setState({ linkTitle: e.target.value});
@@ -35,12 +55,23 @@ class EditModal extends Component {
         'Content-Type': 'application/json',
       },
       body: JSON.stringify({linkId : toupdate_id, title : newTitle, url : newURL, detail : newDesc, tags: this.state.selectedTags})
-    }).then(
-
+    })
+    .then(response => response.json())
+    .then(
       
-      this.props.handleClose(),
-      this.props.update()
+      (response) => {
 
+
+        if (response.status === "ignored"){
+          this.showNotification("Update Ignored", "Not executing guest request to protect the data", "info", 2500);
+        }else{
+          this.props.handleClose();
+          this.showNotification("Update Success", `Updated ${newTitle}`, "success");
+          this.props.update();
+        }
+
+      }
+      
     )
     .catch((error) => {
       console.log(error);
@@ -48,7 +79,7 @@ class EditModal extends Component {
 
   }
     
-  handleDeleteLink = (todelete_id) => {
+  handleDeleteLink = (todelete_id, todelete_title) => {
 
     fetch("/deleteLink", {
       method: 'POST',
@@ -57,11 +88,21 @@ class EditModal extends Component {
         'Content-Type': 'application/json',
       },
       body: JSON.stringify({linkId : todelete_id})
-    }).then(
+    })
+    .then(response => response.json())
+    .then(
 
-      this.props.handleClose(),
-      this.props.update()
+      (response) =>{
 
+        if (response.status === "ignored"){
+          this.showNotification("Delete Ignored", "Not executing guest request to protect the data", "info", 2500);
+        }else{
+          this.props.handleClose();
+          this.showNotification("Delete Success", `Deleted ${todelete_title}`, "warning");
+          this.props.update();
+        }
+      }
+     
     )
     .catch((error) => {
       console.log(error);
@@ -163,7 +204,7 @@ class EditModal extends Component {
           </Modal.Body>
 
           <Modal.Footer>
-            <Button variant="danger" onClick={this.handleDeleteLink.bind(this, linkId)}>
+            <Button variant="danger" onClick={this.handleDeleteLink.bind(this, linkId, linkTitle)}>
               Delete Link
             </Button>
             <Button variant="success" onClick={this.handleUpdateLink.bind(this, linkId, linkUrl,linkTitle,linkDetail)}>
