@@ -127,6 +127,9 @@ Take in `linkId`,  delete link as well as associated tags relationship, return `
 ```
 npm init -y
 npm install body-parser
+npm install bootstrap
+npm install react-bootstrap
+npm install jquery popper.js
 npm install dotenv
 npm install express
 npm install -D nodemon
@@ -137,7 +140,6 @@ npm install cors
 npm install rquest
 npm install request
 npm install cheerio
-npm install react-bootstrap
 npm install express-session
 npm install react-notifications-component
 ```
