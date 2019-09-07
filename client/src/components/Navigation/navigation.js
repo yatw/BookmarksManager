@@ -13,7 +13,7 @@ class Nav extends Component {
   }
 
   updateCounts(){
-
+    
     fetch('/getLinksCount')
     .then(res => res.json())
     .then(res => this.setState({
@@ -30,10 +30,7 @@ class Nav extends Component {
   }
   
   componentWillReceiveProps(newprops) {
-
-    if (newprops.needUpdate){
-      this.updateCounts();
-    }
+    this.updateCounts();
   }
 
   componentDidMount(){
@@ -111,7 +108,6 @@ class Nav extends Component {
   // PropTypes
   Nav.propTypes = {
     update: PropTypes.func.isRequired,
-    needUpdate: PropTypes.bool.isRequired,
     handleSearch: PropTypes.func.isRequired,
     tags: PropTypes.array.isRequired,
     filterTags: PropTypes.array.isRequired,

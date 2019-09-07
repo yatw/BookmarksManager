@@ -1,4 +1,5 @@
 const bodyParser = require('body-parser');
+const cors = require('cors');
 const express = require('express');
 const path = require('path');
 const session = require('express-session');
@@ -7,7 +8,7 @@ require('dotenv').config();
 
 const app = express();
 
-const TEN_MIN = 1000 * 60 * 20;
+const TEN_MIN = 1000 * 60 * 10;
 
 var sess = {
   secret: process.env.sessionSecret,
@@ -18,10 +19,27 @@ var sess = {
   }
 }
 
-app.set('trust proxy', 1) // trust first proxy
+app.set('trust proxy', 1); // trust first proxy
 
-app.use(session(sess))
+app.use(session(sess));
 
+
+var whitelist = ['http://localhost:5000/', 'http://localhost:3000', 'https://yatw-bookmark.herokuapp.com']
+var corsOptions = {
+  origin: function (origin, callback) {
+
+    //If you do not want to block REST tools or server-to-server requests, add a !origin check in the origin function like so:
+    if (whitelist.indexOf(origin) !== -1  || !origin) {
+      callback(null, true)
+    } else {
+      console.log(origin);
+      callback(new Error(origin,'Not allowed by CORS'))
+    }
+  
+  }
+}
+
+app.use(cors(corsOptions));
 
 app.use(function(req, res, next) {
 

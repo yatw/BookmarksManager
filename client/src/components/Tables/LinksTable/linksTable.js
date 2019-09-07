@@ -44,9 +44,7 @@ class LinksTable extends Component {
 
   // receive new props when a new link is added, or search term is entered
   componentWillReceiveProps(newprops) {
-    if (newprops.needUpdate){
-      this.displayAll( newprops.filterTags, newprops.searchTerm);
-    }
+    this.displayAll( newprops.filterTags, newprops.searchTerm);
   }
 
   handleSort(sortby){
@@ -95,7 +93,6 @@ class LinksTable extends Component {
 // PropTypes
 LinksTable.propTypes = {
   update: PropTypes.func.isRequired,
-  needUpdate: PropTypes.bool.isRequired,
   searchTerm: PropTypes.string.isRequired,
   tags: PropTypes.array.isRequired,
   filterTags: PropTypes.array.isRequired

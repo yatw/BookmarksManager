@@ -18,9 +18,6 @@ class EditModal extends Component {
     };
   }
 
-  componentWillReceiveProps(newprops) {
-    this.getSelectedTags();
-  }
   
   showNotification(title, message, type, time=1000){
 
@@ -143,7 +140,7 @@ class EditModal extends Component {
       console.log(error);
     });
 
-}
+  }
 
   getTagClass = (tagName) =>{
     

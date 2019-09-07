@@ -17,10 +17,9 @@ class App extends Component{
     this.handleSearch = this.handleSearch.bind(this);
     this.state = {
 
-      needUpdate : false,
       searchTerm: "",
       tags : [],
-      filterTags : []
+      filterTags : []  // the tags that are actually clicked
     };
   }
 
@@ -45,7 +44,7 @@ class App extends Component{
 
 
   update(){
-    this.setState({needUpdate: true});
+    this.forceUpdate();
   }
 
 
@@ -73,7 +72,7 @@ class App extends Component{
       l = this.state.filterTags.concat(tagName);
     }
 
-    this.setState({ filterTags: l, needUpdate: true });
+    this.setState({ filterTags: l });
 
   }
 
@@ -85,9 +84,9 @@ class App extends Component{
         <ReactNotification />
         <LoginModal/>
 
-        <Nav needUpdate={this.state.needUpdate} update={this.update} handleSearch={this.handleSearch} tags={this.state.tags} filterTags={this.state.filterTags} handleFilter={this.handleFilter}/>
+        <Nav update={this.update} handleSearch={this.handleSearch} tags={this.state.tags} filterTags={this.state.filterTags} handleFilter={this.handleFilter}/>
 
-        <LinksTable needUpdate={this.state.needUpdate} update={this.update} searchTerm={this.state.searchTerm} tags={this.state.tags} filterTags={this.state.filterTags}/>
+        <LinksTable update={this.update} searchTerm={this.state.searchTerm} tags={this.state.tags} filterTags={this.state.filterTags}/>
       </div>
       
     );

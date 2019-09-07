@@ -43,10 +43,11 @@ The project is ongoing, but most of the important features are completed.
 - [x] Hosting
 - [x] Sorting
 - [x] Tags
-- [x] User Session
 - [x] Notification
+- [x] User Session
+- [ ] Force login after session expire
 - [ ] Export Storage
-- [ ] Bootstrap CORS 
+- [x] Bootstrap CORS 
 
 
 #### Known Issue
@@ -55,9 +56,6 @@ The project is ongoing, but most of the important features are completed.
 
 2. Sometimes Bootstrap can't load due to ```Cross-Origin Request Blocked: The Same Origin Policy disallows reading the remote resource at https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css. (Reason: CORS request did not succeed).```
 
-3. Inside EditModal's fetch getSelectedTags displays ```TypeError: "NetworkError when attempting to fetch resource."```
-
-4. When filter by tag, inside linksItem's EditModal displays ```Warning: Can't perform a React state update on an unmounted component```
 
 
 ## Frontend React Components
@@ -71,7 +69,7 @@ The whole page is split into 2 sections, the `Navigation` and `Tables` component
 |   +-- insertModal
 +-- linksTable
 |   +-- linksItem
-|   +-- editModal
+|       +-- editModal
 ```
 
 ## Backend APIs
