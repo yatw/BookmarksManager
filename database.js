@@ -45,69 +45,20 @@ handleDisconnect();
 
 
 function insertLink (input, callback) {
-  
-  connection.query('INSERT INTO links SET title = ?, url = ?, detail = ?, createdDate = ?, star = ?, completed = ?', [input.title, input.url, input.detail, moment(Date.now()).format('YYYY-MM-DD'), false, false],  (err, result) => {
+  connection.query('CALL insertLink(?,?,?);', [input.title, input.url, input.detail],  (err, result) => {
       if (err) {
         console.log(err);
         callback({"status":"error"});
         throw err;
       }
-  });
 
-  // for each tag, insert the relation into the linkTag table
-  input.tags.forEach(function (tag, index) {
+      let insertedId = result[0][0].linkId;
+      
+      // for each tag, insert the relation into the linkTag table
+      input.tags.forEach(function (tag, index) {
 
-      connection.query('INSERT INTO linkTag (link, tag)  VALUES ((SELECT linkId FROM links WHERE url = ?), (SELECT tagId FROM tags WHERE name = ?));', [input.url, tag],  (err) => {
-        if (err) {
-          console.log(err);
-          callback({"status":"error"});
-          throw err;
-        }
-      });
-
-  });
-
-  callback({"status":"success"});
-}
-
-function updateLink (input, callback) {
-
-  
-  connection.query('UPDATE links SET url = ?, title = ?, detail = ? WHERE linkId = ?', [input.url, input.title, input.detail, input.linkId],  (err, result) => {
-      if (err) {
-        callback({"status":"error"});
-        throw err;
-      }
-  });
-  
-
-  var c = "SELECT name FROM  \
-          linkTag INNER JOIN tags on linkTag.tag = tags.tagId  \
-          WHERE link = ?";
-  
-
-  // get this link's current selected tags
-  connection.query(c, [input.linkId],  (err, result) => {
-    if (err) {
-      callback({"status":"error"});
-      throw err;
-    }
-    
-    var curSelected = new Set(); 
-
-    // iterate through result, which is the current tags
-    result.forEach(function (tag, index) {
-
-      // if it is already in input, it is already selected, no need to do anything
-      if (input.tags.includes(tag.name)){
-
-        curSelected.add(tag.name);
-
-      }else{
-
-        // otherwise, if this tag is now not needed, remove
-
-        connection.query('DELETE FROM linkTag WHERE link = ? AND tag = (SELECT tagId FROM tags WHERE name = ?);', [input.linkId, tag.name],  (err, result) => {
+        // cannot use url, use url to get id
+        connection.query('CALL insertLinkTagRelation(?,?);', [insertedId, tag],  (err) => {
           if (err) {
             console.log(err);
             callback({"status":"error"});
@@ -115,6 +66,53 @@ function updateLink (input, callback) {
           }
         });
 
+      });
+  });
+
+ 
+  callback({"status":"success"});
+}
+
+function updateLink (input, callback) {
+
+  // update information associated with the link
+  connection.query('CALL updateLink(?,?,?,?);', [input.url, input.title, input.detail, input.linkId],  (err, result) => {
+      if (err) {
+        callback({"status":"error"});
+        throw err;
+      }
+  });
+  
+  // update the corresponding link tag relation
+
+  // get this link's current selected tags
+  connection.query("CALL getSelectedTags(?);", [input.linkId],  (err, result) => {
+    if (err) {
+      callback({"status":"error"});
+      throw err;
+    }
+
+    let prevSelected = result[0].map((r)=> r.name);
+    
+    var curSelected = new Set(); 
+
+    // iterate through prevSelected, which is the tags before this update
+    prevSelected.forEach(function (tag, index) {
+      
+      // if it is already in input, it is already selected, no need to do anything
+      if (input.tags.includes(tag)){
+        curSelected.add(tag);
+
+      }else{
+        // otherwise, if this tag is now not needed, remove
+
+        connection.query('CALL deleteLinkTagRelation(?,?);', [input.linkId, tag],  (err, result) => {
+          if (err) {
+            console.log(err);
+            callback({"status":"error"});
+            throw err;
+          }
+        });
       }
     })
 
@@ -122,15 +120,16 @@ function updateLink (input, callback) {
     input.tags.forEach(function (tag, index) {
 
       if (!curSelected.has(tag)){  // if this new tag is not already a tag, insert it
-
-        connection.query('INSERT INTO linkTag (link, tag) VALUES (?, (SELECT tagId FROM tags WHERE name = ?));', [input.linkId, tag],  (err, result) => {
+      
+        connection.query('CALL insertLinkTagRelation(?,?);', [input.linkId, tag],  (err, result) => {
           if (err) {
             console.log(err);
             callback({"status":"error"});
             throw err;
           }
         });
-        curSelected.add(tag.name);
+         
+        curSelected.add(tag);
       }
     })
 
@@ -142,22 +141,14 @@ function updateLink (input, callback) {
 function deleteLink (input, callback) {
 
 
-  // delete the relation in the linkTag table
-  connection.query('DELETE FROM linkTag WHERE link = ?;', [input.linkId],  (err, result) => {
+  connection.query('CALL deleteLink(?);', [input.linkId],  (err, result) => {
     if (err) {
       callback({"status":"error"});
       throw err;
     }
   });
+  callback({"status":"success"});
 
-  // delete the link itself
-  connection.query('DELETE FROM links WHERE linkId = ?;', [input.linkId],  (err, result) => {
-      if (err) {
-        callback({"status":"error"});
-        throw err;
-      }
-      callback({"status":"success"});
-  });
 }
 
 
@@ -217,18 +208,19 @@ function displayLinks(input, callback){
 
 function getLinksCount(callback){
   
-  connection.query('SELECT COUNT(*) as count FROM links;',  (err, result) => {
+  connection.query('CALL getLinksCount();',  (err, result) => {
       if (err) throw err;
-      callback(result);
+      callback(result[0]);
   });
   
 }
 
 function checkExist(input, callback){
 
-  var query = connection.query('SELECT COUNT(*) as count FROM links WHERE url=?', [input], (err, result) => {
+  var query = connection.query('CALL checkExist(?);', [input], (err, result) => {
       if (err) throw err;
-      callback(result[0]);
+
+      callback(result[0][0]);
   });
 
 }
@@ -237,7 +229,7 @@ function checkExist(input, callback){
 // both star and read are checkbox and use this function
 function checkbox(input){
 
-  connection.query('UPDATE links SET ?? = ? WHERE linkId = ?;', [input.field, input.status, input.linkId], (err, result) => {
+  connection.query('CALL checkbox(?,?,?);', [input.field, input.status, input.linkId], (err, result) => {
       if (err) throw err;
   });
 }
@@ -245,9 +237,9 @@ function checkbox(input){
 
 function displayTags(input, callback){
 
-  var query = connection.query('SELECT * FROM tags ORDER BY name;', (err, result) => {
+  var query = connection.query('CALL displayTags();', (err, result) => {
       if (err) throw err;
-      callback(result);
+      callback(result[0]);
   });
 
 }
@@ -255,16 +247,12 @@ function displayTags(input, callback){
 function getSelectedTags(input, callback){
 
   
-var q =   " SELECT name from  \
-            tags INNER JOIN linkTag on linkTag.tag = tags.tagId  \
-            WHERE link = ?;"
-
-  var query = connection.query(q, [input.linkId], (err, result) => {
+  var query = connection.query('CALL getSelectedTags(?);', [input.linkId], (err, result) => {
     if (err) throw err;
 
     var selectedTags = [];
 
-    result.forEach(function (item, index) {
+    result[0].forEach(function (item, index) {
       selectedTags.push(item.name);
     });
 

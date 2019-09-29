@@ -93,7 +93,6 @@ class EditModal extends Component {
     .then(
 
       (response) =>{
-
         if (response.status === "ignored"){
           this.showNotification("Delete Ignored", "Not executing guest request to protect the data", "info", 2500);
         }else{
@@ -148,7 +147,7 @@ class EditModal extends Component {
 
   getTagClass = (tagName) =>{
     
-    var index = this.state.selectedTags.indexOf(tagName);
+    let index = this.state.selectedTags.indexOf(tagName);
 
     return (index > -1)? "list-group-item list-group-item-info" : "list-group-item ";
   }

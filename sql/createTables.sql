@@ -22,7 +22,7 @@ CREATE TABLE IF NOT EXISTS links (
     detail VARCHAR(255),
     url VARCHAR(255),
     createdDate DATE,
-    star boolean,
-    completed boolean,
+    star BOOLEAN,
+    completed BOOLEAN,
     PRIMARY KEY (linkId)
 );

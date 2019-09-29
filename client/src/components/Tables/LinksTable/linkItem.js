@@ -44,8 +44,8 @@ export class LinkItem extends Component {
   checkboxToggle = (id, field, curState) => {
     // call node.js route to update db
 
-    var starState = this.state.star;
-    var completedState = this.state.completed;
+    let starState = this.state.star;
+    let completedState = this.state.completed;
 
     if (field === "star"){
         starState = !starState;

@@ -49,7 +49,7 @@ class LinksTable extends Component {
 
   handleSort(sortby){
 
-    var order = true;
+    let order = true;
 
     if (this.state.sortby === sortby){ // if currently sorted on the same field, just sort the other way
       order = !this.state.order;
@@ -61,7 +61,7 @@ class LinksTable extends Component {
   
   render() {
 
-    var linkNum = 1;
+    let linkNum = 1;
 
     return (
 

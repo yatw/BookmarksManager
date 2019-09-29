@@ -59,7 +59,7 @@ class InsertModal extends Component {
   urlonChange = (e) => {
 
 
-    var inputUrl = e.target.value;
+    let inputUrl = e.target.value;
     document.getElementById("titleInput").value = "Loading...";
     document.getElementById("descInput").value = "Loading...";
     this.setState({ urlInput: inputUrl, isDuplicate: false});
@@ -76,10 +76,20 @@ class InsertModal extends Component {
       .then(data => {
 
         if (data.status === "success"){
+
+            let defaultTags = [];
+
+            if (/youtube/.test(inputUrl)){
+              defaultTags.push("youtube");
+            }
+            if (/reddit/.test(inputUrl)){
+              defaultTags.push("reddit");
+            }
             
             this.setState({ titleInput: data.title,
                 descInput: data.metaDescription,
-                borderColor: '#00b300'
+                borderColor: '#00b300',
+                selectedTags: this.state.selectedTags.concat(defaultTags)
             });
 
             document.getElementById("titleInput").value = data.title;
@@ -165,8 +175,7 @@ class InsertModal extends Component {
   }
 
   getTagClass = (tagName) =>{
-
-    var index = this.state.selectedTags.indexOf(tagName);
+    let index = this.state.selectedTags.indexOf(tagName);
     return (index > -1)? "list-group-item list-group-item-info" : "list-group-item";
   }
 

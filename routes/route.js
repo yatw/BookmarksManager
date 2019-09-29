@@ -24,6 +24,7 @@ router.get('/', urlencodedParser, function(req, res){
   if (req.session.views) {
     req.session.views++
     res.setHeader('Content-Type', 'text/html')
+    res.write('<p>You are viewing in port 5000, to view in React, use 3000</p>')
     res.write('<p>views: ' + req.session.views + '</p>')
     res.write('<p>expires in: ' + (req.session.cookie.maxAge / 1000) + 's</p>')
     res.end()
@@ -94,7 +95,7 @@ router.post('/getTitle', urlencodedParser, function(req, res){
             }
             
             const webpage = {
-              status: count == 0? "success" : "duplicate", 
+              status: result.count === 0? "success" : "duplicate", 
               title: webpageTitle,
               metaDescription: metaDescription,
               statusCode: response.statusCode

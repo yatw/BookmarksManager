@@ -36,8 +36,9 @@ The project is ongoing, but most of the important features are completed.
 - [x] Insert Modal
 - [x] Edit Modal (with Delete)
 - [x] Star/Complete toggle
-- [x] Automatic extract website info
-- [x] Automatic generate created-date
+- [x] Automatically extract website info
+- [x] Automatically generate created-date
+- [x] Automatically select known tag
 - [x] Filter on search
 - [x] Prevent duplication on insert
 - [x] Hosting
