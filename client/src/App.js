@@ -40,8 +40,8 @@ class App extends Component{
     ).catch((error) => {
       console.log(error);
     });
-  }
 
+  }
 
   update(){
     this.forceUpdate();
@@ -49,8 +49,8 @@ class App extends Component{
 
 
   handleSearch(searchTerm){
-    
-    this.setState({needUpdate: true, searchTerm : searchTerm.trim()})
+  
+    this.setState({searchTerm : searchTerm.trim()})
     
   }
 
@@ -82,7 +82,7 @@ class App extends Component{
   
       <div className="container-fluid">
         <ReactNotification />
-        <LoginModal/>
+        <LoginModal />
 
         <Nav update={this.update} handleSearch={this.handleSearch} tags={this.state.tags} filterTags={this.state.filterTags} handleFilter={this.handleFilter}/>
 

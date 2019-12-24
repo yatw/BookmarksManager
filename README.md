@@ -9,10 +9,7 @@ A full-stack web app to store and organize useful information for future referen
 #### Ambition
 
 My browser's Bookmarks Toolbar stops being useful after 20 links or so.  
-I also need a way to find out what got deleted from my youtube playlist.  
-Making my own bookmarks manger allow me easily save and retrieve these informations without relying on other services.  
-This project can solve an actual problem that I have and familar myself with technologies such as Node.Js and React.
-
+I also need my own cross device platform bookmark.
 
 #### How to use
 
@@ -29,7 +26,7 @@ Visitors can search and browse the collections but cannot insert or delete from 
 
 #### Status
 
-The project is ongoing, but most of the important features are completed.
+The project is ongoing, but most of the features are completed.
 
 ### Tasks
 
@@ -46,7 +43,7 @@ The project is ongoing, but most of the important features are completed.
 - [x] Tags
 - [x] Notification
 - [x] User Session
-- [ ] Force login after session expire
+- [x] Force login after session expire
 - [ ] Export Storage
 - [x] Bootstrap CORS 
 
@@ -57,6 +54,11 @@ The project is ongoing, but most of the important features are completed.
 
 2. Sometimes Bootstrap can't load due to ```Cross-Origin Request Blocked: The Same Origin Policy disallows reading the remote resource at https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css. (Reason: CORS request did not succeed).```
 
+3. Free Hosting on Heroku means the app will inevitably "sleep". While the frontend may look normal and active, any backend request may take a while to "wake" the server up again.
+
+#### Challenges
+
+1. React child components depend on the state of each other. For example, table display links according to the search term and tags state in the navigation. Therefore, on search term input, navigation needs to notify app about update, and app then notify table.
 
 
 ## Frontend React Components
@@ -161,7 +163,9 @@ npm start
 
 Do this everytime!
 
-Delete ```build``` folder inside client and then do ```npm run build``` to get ready for production
+```cd client``` and delete ```build``` folder, then do ```npm run build``` to get ready for production
+
+For First time set up
 
 In the backend `package.json` file, Heroku will use `npm start` to start the server.
 `heroku-postbuild` is used to start the frontend react server

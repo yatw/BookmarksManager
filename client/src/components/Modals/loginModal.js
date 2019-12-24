@@ -3,36 +3,18 @@ import { Button, Modal } from 'react-bootstrap';
 
 import { store } from 'react-notifications-component';
 
-
 class LoginModal extends Component {
 
     constructor(props) {
         super(props);
     
         this.state = {
-            isShown : false,
+            
+            inSession : false,
             incorrectUser: false
         };
     }
 
-    componentWillReceiveProps(newprops) {
-
-        fetch("/isLogin", {
-            method: 'GET',
-            headers: {
-              Accept: 'application/json',
-              'Content-Type': 'application/json',
-            }
-          })
-          .then(response => response.json())
-          .then(isLogin => {
-              this.setState({ isShown: !isLogin.status})
-          })
-          .catch((error) => {
-            console.log(error);
-          });
-
-    }
 
     showNotification(title, message, type){
 
@@ -63,20 +45,27 @@ class LoginModal extends Component {
             },
             body: JSON.stringify({userName : name})
           }).then(response => response.json())
-          .then(response =>
+          .then(response => 
             
              (response.status)? 
              
-             (this.setState({isShown: false}),
-              this.showNotification("Login Success", `Welcome ${name}` , "success")
+             (this.setState({inSession: true}),
+              this.showNotification("Login Success", `Welcome ${name}` , "success"),
+
+              // 10 minutes timeout
+              setTimeout(() => {
+                this.showNotification("Session Expired","Please login again", "default")
+                this.setState({inSession: false});
+              }, 10 * 60 * 1000)
              )
 
-             : this.setState({incorrectUser: true})
+             : this.setState({incorrectUser: true}) 
+            
           )
           .catch((error) => {
             console.log(error);
           });
- 
+
     }
 
     displayIncorrectWarning(){
@@ -106,7 +95,7 @@ class LoginModal extends Component {
         return (
             <>
             
-            <Modal id="loginModal" show={this.state.isShown} onHide={this.requestLogin.bind(this)}>
+            <Modal id="loginModal" show={!this.state.inSession} onHide={this.requestLogin.bind(this)}>
               <Modal.Header>
                 <Modal.Title>Login</Modal.Title>
               </Modal.Header>
@@ -136,5 +125,6 @@ class LoginModal extends Component {
     }
 
 }
+
 
 export default LoginModal
