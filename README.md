@@ -1,21 +1,17 @@
-# Bookmarks Manager
 
-A full-stack web app to store and organize useful information for future reference
+
+# Bookmarks Manager
 
 [Demo available here](https://yatw-bookmark.herokuapp.com/)
 
+![](BookmarkDemo.gif)
+
+I also have my own [firefox browser extension](https://github.com/yatw/Savedis) to quickly save any web page.  
+
 ## About the project
 
-#### Ambition
 
-My browser's Bookmarks Toolbar stops being useful after 20 links or so.  
-I also need my own cross device platform bookmark.
-
-#### How to use
-
-Visitors can search and browse the collections but cannot insert or delete from the database.
-
-#### Technologies
+### Technologies
 
 - **Frontend**: React, Bootstrap, CSS
 - **Backend**:  Node.js, Express
@@ -23,12 +19,7 @@ Visitors can search and browse the collections but cannot insert or delete from 
 - **Language**: JavaScript
 - **Deployment**: Heroku, ClearDB MySQL
 
-
-#### Status
-
-The project is ongoing, but most of the features are completed.
-
-### Tasks
+### Features
 
 - [x] Insert Modal
 - [x] Edit Modal (with Delete)
@@ -50,112 +41,44 @@ The project is ongoing, but most of the features are completed.
 
 #### Known Issue
 
-1. ClearDB MySQL will automatically disconnect as explained [here](https://stackoverflow.com/questions/18433124/heroku-and-nodejs-mysql-connection-lost-the-server-closed-the-connection), this sometimes causes delay because server has to establish a new connection
+1. ClearDB MySQL will automatically disconnect as explained [here](https://stackoverflow.com/questions/18433124/heroku-and-nodejs-mysql-connection-lost-the-server-closed-the-connection), this sometimes causes delay because server has to establish a new connection.
 
 2. Sometimes Bootstrap can't load due to ```Cross-Origin Request Blocked: The Same Origin Policy disallows reading the remote resource at https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css. (Reason: CORS request did not succeed).```
 
 3. Free Hosting on Heroku means the app will inevitably "sleep". While the frontend may look normal and active, any backend request may take a while to "wake" the server up again.
 
+4. App will crash if the amount of requests to database exceeded the free plan.
+
 #### Challenges
 
 1. React child components depend on the state of each other. For example, table display links according to the search term and tags state in the navigation. Therefore, on search term input, navigation needs to notify app about update, and app then notify table.
 
-
-## Frontend React Components
-
-The whole page is split into 2 sections, the `Navigation` and `Tables` components; both with their associated modals 
-
-**Component Structure**
-```
-+-- loginModal
-+-- Navigation
-|   +-- insertModal
-+-- linksTable
-|   +-- linksItem
-|       +-- editModal
-```
-
-## Backend APIs
-
-Below is the list of Node.js APIs mostly designed to interact with the database.
-
-#### `/isLogin`
-Take no arguments, return `bool` if the userName is in the session
-
-#### `/login`
-Take in a `userName` and register it into the current session
-
-#### `/displayLinks`
-Take in `tags(array)`,  `searchTerm`, and `sortby` with `order`, select and return from database
-
-#### `/getLinksCount`
-Take no arguments, return the number of links saved in database
-
-#### `/getTitle`
-Take in `url`,  using **cheerio** module to extract the page's title and meta as description, return as an object with `status`,`title`, `metaDescription`, and `statusCode`
-
-#### `/insertLink`
-Take in `title`, `url`, `detail` , and `tagas(array)`,  insert the new link into database, return `status(bool)` 
-
-#### `/displayTags`
-Take no arguments,  return a list of tags in the database 
-
-#### `/getSelectedTags`
-Take in `linkId`,  return a list of tags associated with this link
-
-#### `/checkbox`
-Take in `field`, `status(bool)`, and `linkId`. Used on both the star and completed field in the link table
-
-#### `/*`
-Catch any Error 404 not found
-
-> In order to protect the data, the following 3 API will not be executed unless user is login as admin
-
-#### `/insertLink`
-Take in `title`, `url`, `detail` , and array `tagas`,  insert the new link into database, return `status(bool)` 
-
-#### `/updateLink`
-Take in `linkId`,  `title`, `url`, `detail` , and array `tagas`,  update all description of the link and related tags, return `status(bool)`
-
-#### `/deleteLink`
-Take in `linkId`,  delete link as well as associated tags relationship, return `status(bool)` 
-
+## Documentation
+[Frontend Backend structure](Documentation.md)
 
 
 ## Instructions
 
 ### Dependencies
 
-**Note that the following was done in Window OS**
-```
-npm init -y
-npm install body-parser
-npm install bootstrap
-npm install react-bootstrap
-npm install jquery popper.js
-npm install dotenv
-npm install express
-npm install -D nodemon
-npm install ejs --save
-npm install moment --save
-npm install mysql
-npm install cors
-npm install rquest
-npm install request
-npm install cheerio
-npm install express-session
-npm install react-notifications-component
-```
+**Note the following was done in Window OS**
 
-**To start running**
+**To start running locally**
 
-To start back end Node.js server
+1. Check [.env file](envStructure.md) is present
+2. Open project in visual studio code from command prompt
 ```
+code .
+```
+3. Start back end Node.js server
+```
+npm install
 npm run dev
 ```
-To start front end react server
+4. Start front end react server
 ```
 cd client
+npm install
 npm start
 ```
 
